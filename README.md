@@ -1,34 +1,118 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 浙江大学 2022 春夏《软件工程》课程期末作业
 
-## Getting Started
+本仓库是浙江大学 2022 春夏《软件工程》课程期末作业的前端代码仓库，作业要求 5 人为一小组负责一个模块，5 个模块组成一个完整的医疗管理系统。
 
-First, run the development server:
+前端部分基于 [Next.js](https://nextjs.org/) 框架开发，编程语言使用 [TypeScript](https://www.typescriptlang.org/) 以保持良好的代码规范性及程序稳定性。
+
+## 项目需求
+
+选题：**综合预约系统**
+
+医生端 & 患者端 & 管理员
+
+- 预约问诊
+- 个人信息
+- 新冠
+- 检测
+- 药物平台
+- 医生门诊
+
+### 用户组成
+
+1. 医生
+   - 可用的系统：个人信息，健康论坛、医生门诊
+2. 患者 
+   - 可用的系统：预约问诊，个人信息，健康论坛，网上药房 
+3. 管理员 
+   - 三个权限单独管理 
+   - 可用的系统：预约问诊管理，健康论坛管理，网上药房管理
+
+### 子系统 1 - 预约问诊
+
+患者端
+- 分科室查看下一周的出诊情况、出诊余量、进行预约、取消预约
+- 点击医生可以查看简介（照片、职位、专场）
+
+管理端
+- 管理科室增删查改、医生增删查改、医生出诊时间段、医生每个时间段的余量
+
+### 子系统 2 - 个人信息
+
+账号的管理（注册、登录、注销）
+
+医生端
+
+- 照片、科室、职位、擅长方向、出诊时间段、简介
+- 可以看到自己出诊时间段已被预约的人数
+
+患者端
+
+- 可以查看&取消自己已经预约的门诊的状态
+- 可以查看自己已经购买的药品
+
+### 子系统 3 - 药物平台
+
+患者端
+
+- 只能用来查看与某次问诊相关的药品信息
+
+管理端
+
+- 药品种类增删查改，药品名称、类别、使用方式、禁忌、余量的增删查改
+
+### 子系统 4 - 新冠检测
+
+患者端
+
+- 预约某一时间段的核酸、抗原检测
+
+管理端
+
+- 管理时间段和余量
+
+### 子系统5 - 医生门诊
+
+医生端
+
+- 问诊分为 3 个状态：未完成、进行中、已完成
+- 由 未完成 经过 接诊 变为 进行中 （患者不可以再取消预约）
+- 由 进行中 经过 结束 变为 已完成 （医生给予病型诊断，给予医嘱，开药品）
+- 显示未完成&进行中的问诊
+- 具有核酸检测结果管理权限的医生，可以选择子模块进行核酸、抗原检测结果的上传
+
+## 前端路由结构
+
+- `/appointment` 预约问诊页面
+  - `/appointment/:id` 某次预约的信息
+- `/medicine` 药物平台页面
+- `/account` 用户管理模块
+  - `/account/login` 登入页面
+  - `/account/:id` 个人信息页面
+- `/covid-19-testing` 新冠检测页面
+
+## 开发环境要求
+
+1. [Node.js](https://nodejs.org/en/) 运行环境 
+2. [pnpm](https://pnpm.io/) 包管理工具
+
+## 开发方式
+
+1. 将本仓库 clone 到本地
 
 ```bash
-npm run dev
-# or
-yarn dev
+git clone git@github.com:ken20001207/zju-se-project.git
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. 使用 `pnpm` 安装依赖
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+3. 启动项目
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+pnpm dev
+```
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+4. 从 http://localhost:3000 访问开发中的网站
