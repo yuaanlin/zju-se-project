@@ -18,15 +18,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         </div>
         <Menu theme={'dark'} mode={'horizontal'} />
       </Header>
-      <Layout>
-        <Layout
-          style={{
-            padding:'24px 24px',
-            height: '100%',
-            minHeight: 550,
-          }}>
-          <Component {...pageProps} />
-        </Layout>
+      <Layout
+        style={{
+          padding:'24px 24px',
+          minHeight: 700
+        }}>
+        <Component {...pageProps} />
       </Layout>
       <Footer
         style={{ textAlign: 'center' }}
