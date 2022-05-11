@@ -19,7 +19,12 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Menu theme={'dark'} mode={'horizontal'} />
       </Header>
       <Layout>
-        <Layout style={{ padding:'0 24px 24px' }}>
+        <Layout
+          style={{
+            padding:'24px 24px',
+            height: '100%',
+            minHeight: 550,
+          }}>
           <Component {...pageProps} />
         </Layout>
       </Layout>

@@ -107,7 +107,6 @@ export default function AppointmentPage() {
           background: '#fff',
           padding: 24,
           margin: 0,
-          minHeight: 480,
         }}
       >
         <div>
