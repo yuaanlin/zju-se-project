@@ -2,6 +2,7 @@ import SiderMenu from '../component/SiderMenu';
 import AddAppointmentModal, { MODAL_STATUS } from '../component/addAppointmentModal';
 import { Button, Form, Layout, Space, Table, Tag } from 'antd';
 import { useState } from 'react';
+// @ts-ignore
 import { PlusOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
