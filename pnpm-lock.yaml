@@ -7,6 +7,7 @@ specifiers:
   '@typescript-eslint/eslint-plugin': ^5.18.0
   '@typescript-eslint/parser': ^5.18.0
   antd: ^4.20.3
+  antd-img-crop: ^4.2.3
   eslint: 8.12.0
   eslint-config-next: 12.1.4
   eslint-plugin-import: ^2.26.0
@@ -20,6 +21,7 @@ dependencies:
   '@typescript-eslint/eslint-plugin': 5.23.0_7wpazmhd56megwea3kt7sig2ly
   '@typescript-eslint/parser': 5.23.0_thk3xo4exzjr5rl6cnexo7v6re
   antd: 4.20.3_zpnidt7m3osuk7shl3s4oenomq
+  antd-img-crop: 4.2.3_zylukqjufbyhsv7rmymxjehg74
   eslint-plugin-import: 2.26.0_24hvj2a5sfuyuxmwnz5iuylrti
   eslint-plugin-react: 7.29.4_eslint@8.12.0
   next: 12.1.4_zpnidt7m3osuk7shl3s4oenomq
@@ -521,6 +523,19 @@ packages:
     dependencies:
       color-convert: 2.0.1
     dev: true
+
+  /antd-img-crop/4.2.3_zylukqjufbyhsv7rmymxjehg74:
+    resolution: {integrity: sha512-YZgsUdfHnkBCOQ1sLXTwfVRgBdMRM//joddFnSlWe/QU52m8PPbBxtgt0YdEf+UTPXOAx6RQJp1gUjAmMU2knA==}
+    peerDependencies:
+      antd: '>=4.0.0'
+      react: '>=16.8.0'
+      react-dom: '>=16.8.0'
+    dependencies:
+      antd: 4.20.3_zpnidt7m3osuk7shl3s4oenomq
+      react: 18.0.0
+      react-dom: 18.0.0_react@18.0.0
+      react-easy-crop: 4.2.0_zpnidt7m3osuk7shl3s4oenomq
+    dev: false
 
   /antd/4.20.3_zpnidt7m3osuk7shl3s4oenomq:
     resolution: {integrity: sha512-liZB/OguxPPNnssiR8UH5gjAV3LetsnA8K0G+VBVJkCZsU5QmCDL05d059Nu6iRD7FVg0drSONZQwvWD4pO4nw==}
@@ -1684,6 +1699,10 @@ packages:
       - babel-plugin-macros
     dev: false
 
+  /normalize-wheel/1.0.1:
+    resolution: {integrity: sha1-rsiGr/2wRQcNhWRH32Ls+GFG7EU=}
+    dev: false
+
   /object-assign/4.1.1:
     resolution: {integrity: sha1-IQmtx5ZYh8/AXLvUQsrIv7s2CGM=}
     engines: {node: '>=0.10.0'}
@@ -2366,6 +2385,18 @@ packages:
       scheduler: 0.21.0
     dev: false
 
+  /react-easy-crop/4.2.0_zpnidt7m3osuk7shl3s4oenomq:
+    resolution: {integrity: sha512-NJdeG6JPlOvXPNcQlmyEyjuseTiZVDa0M5X6BwTxSPR30MG3ROsSHKeGl5SQdI3TfmsoEgvl7MbM+AjFGj+faw==}
+    peerDependencies:
+      react: '>=16.4.0'
+      react-dom: '>=16.4.0'
+    dependencies:
+      normalize-wheel: 1.0.1
+      react: 18.0.0
+      react-dom: 18.0.0_react@18.0.0
+      tslib: 2.0.1
+    dev: false
+
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
 
@@ -2582,6 +2613,10 @@ packages:
 
   /tslib/1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
+
+  /tslib/2.0.1:
+    resolution: {integrity: sha512-SgIkNheinmEBgx1IUNirK0TUD4X9yjjBRTqqjggWCU3pUEqIk3/Uwl3yRixYKT6WjQuGiwDv4NomL3wqRCj+CQ==}
+    dev: false
 
   /tsutils/3.21.0_typescript@4.6.3:
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
