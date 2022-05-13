@@ -1,10 +1,11 @@
 import SiderMenu from '../component/SiderMenu'
-import { Form, Input, Button, Layout, TimePicker } from 'antd'
+import { Form, Input, Button, Layout, DatePicker, TimePicker, Table, Space } from 'antd'
 const { Content } = Layout
 import { request } from '../../services'
 import Avatar from "./avatar"
 import Gender from "./gender"
-
+import Addphase from "./AddSchedule"
+import AddSchedule from './AddSchedule'
 
 type patient_info = 
 {   id                    : number
@@ -43,7 +44,6 @@ const PatientInfo = ({info}:{info:patient_info})=>{
         .then(()=>console.log("OK"))
         .catch(()=>alert("修改失败，检查网络"))
         */
-    
     return (<>
     <SiderMenu />
     <Content
@@ -95,7 +95,7 @@ const doctor : doctor_info =
 ,   phone                 : "12345678901"
 ,   email                 : "Doctor@Q.com"
 ,   description           : "XXXXX"
-,   visitTime             : []
+,   visitTime             : ['11:30:00-13:40:00','11:30:00-13:40:00']
 }
 
 const DoctorInfo = ({info}:{info:doctor_info})=>{
@@ -110,6 +110,32 @@ const DoctorInfo = ({info}:{info:doctor_info})=>{
         .then(()=>console.log("OK"))
         .catch(()=>alert("修改失败，检查网络"))
         */
+    const fixedColumns = [
+        {
+            title: '序号',
+            dataIndex: 'index',
+            fixed: true,    
+        },
+        {
+            title: '出诊时间段',
+            dataIndex: 'date',
+            fixed: true,    
+        },
+        {
+            title: '操作',
+            render: (text: any, record: any) => (
+            <Space size="middle">
+                <Button>删除该时间段</Button>
+            </Space>
+            ),
+        },
+        ];
+    const fixedData = []
+    const new_phase = ""
+    info.visitTime.map((item,index) => {
+        fixedData.push({index,
+            date: item})
+    })
     return (<>
         <SiderMenu />
         
@@ -136,8 +162,17 @@ const DoctorInfo = ({info}:{info:doctor_info})=>{
         <Form.Item name="title" label="职称"><Input /></Form.Item>
         <Form.Item name="phone" label="电话"><Input /></Form.Item>
         <Form.Item name="email" label="邮件"><Input /></Form.Item>
-        <Form.Item name="description" label="描述"><Input /></Form.Item>
-        <Form.Item name="visitTime" label="出诊时间"> <TimePicker.RangePicker /> [TODO] </Form.Item>
+        <Form.Item name="description" label="描述"><Input /></Form.Item>        
+        <Form.Item label="出诊时间">
+            <Table
+            columns={fixedColumns}
+            dataSource={fixedData}
+            pagination={false}
+            scroll={{y: 500 }}
+            size="small"
+            />
+        </Form.Item>        
+        <Form.Item name="visitTime" label="增加出诊时间"><AddSchedule /></Form.Item>
         <Button type="primary" htmlType="submit"> 修改 </Button>
         </Form>
         </Content>
@@ -208,6 +243,7 @@ const AdminInfo = ({info}:{info:admin_info})=>{
 */
 
 const Demo = ()=>(
+    
     // <PatientInfo info={patient}/>
     <DoctorInfo info={doctor}/>
     // <AdminInfo info={admin}/>
