@@ -95,12 +95,12 @@ const doctor : doctor_info =
 ,   phone                 : "12345678901"
 ,   email                 : "Doctor@Q.com"
 ,   description           : "XXXXX"
-,   visitTime             : ['11:30:00-13:40:00','11:30:00-13:40:00']
+,   visitTime             : []
 }
 
 const DoctorInfo = ({info}:{info:doctor_info})=>{
     const [form] = Form.useForm()
-    const onFinish = (info:patient_info)=>
+    const onFinish = (info:patient_info)=>        
         console.log(info) // for Debug in Dev
         /* request( // for Production
         { method: 'PUT'
@@ -110,32 +110,6 @@ const DoctorInfo = ({info}:{info:doctor_info})=>{
         .then(()=>console.log("OK"))
         .catch(()=>alert("修改失败，检查网络"))
         */
-    const fixedColumns = [
-        {
-            title: '序号',
-            dataIndex: 'index',
-            fixed: true,    
-        },
-        {
-            title: '出诊时间段',
-            dataIndex: 'date',
-            fixed: true,    
-        },
-        {
-            title: '操作',
-            render: (text: any, record: any) => (
-            <Space size="middle">
-                <Button>删除该时间段</Button>
-            </Space>
-            ),
-        },
-        ];
-    const fixedData = []
-    const new_phase = ""
-    info.visitTime.map((item,index) => {
-        fixedData.push({index,
-            date: item})
-    })
     return (<>
         <SiderMenu />
         
@@ -163,16 +137,9 @@ const DoctorInfo = ({info}:{info:doctor_info})=>{
         <Form.Item name="phone" label="电话"><Input /></Form.Item>
         <Form.Item name="email" label="邮件"><Input /></Form.Item>
         <Form.Item name="description" label="描述"><Input /></Form.Item>        
-        <Form.Item label="出诊时间">
-            <Table
-            columns={fixedColumns}
-            dataSource={fixedData}
-            pagination={false}
-            scroll={{y: 500 }}
-            size="small"
-            />
-        </Form.Item>        
-        <Form.Item name="visitTime" label="增加出诊时间"><AddSchedule /></Form.Item>
+        <Form.Item name="visitTime" label="出诊时间">
+            <AddSchedule schedulelist={info.visitTime}/>
+        </Form.Item>
         <Button type="primary" htmlType="submit"> 修改 </Button>
         </Form>
         </Content>
