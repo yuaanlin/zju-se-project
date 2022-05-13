@@ -1,27 +1,53 @@
 import SiderMenu from '../component/SiderMenu';
+import { Button, Form, Space, Table, Tag } from 'antd';
 import { Layout } from 'antd';
-const { Content } = Layout;
+const { Header, Footer, Sider, Content } = Layout;
+import Image from './Image'
+import Icon from '@ant-design/icons';
+import logo from './medicineIcon.svg';
+import styles from '../../styles/Home.module.css';
+import Link from 'next/link';
+//import MessageSvg from 'path/to/message.svg';
+
 export default function MedicinePage() {
   return (
-    <>
-      <SiderMenu />
-      <Content
-        className="site-layout-background"
-        style={{
-          background: '#fff',
-          padding: 24,
-          margin: 0,
-          minHeight: 480,
-        }}
-      >
-        <div>
-          <h1>药物平台</h1>
-          <p>
-            在 <code>pages/medicine</code> 目录下添加 <code>.tsx</code> 文件，
-            即可在这个模块的路由下添加需要的二级路由。
-          </p>
-        </div>
-      </Content>
-    </>
+    <Layout>
+      <Sider style={{
+            background: '#fff',
+            padding: 24,
+            margin: 0,
+            minHeight: 480,
+          }}><SiderMenu /></Sider>
+
+      <Layout>
+        <Header style={{
+            background: '#fff',
+            padding: 24,
+          }}><h1>药物平台</h1></Header>
+        <Content 
+          className="site-layout-background"
+          style={{
+            background: '#fff',
+            padding: 24,
+            margin: 0,
+            minHeight: 480,
+          }}>
+           <Layout>
+            <Content>Where to place the list</Content>
+           <Sider style={{
+            background: '#fff',
+            padding: 24,
+            margin: 0,
+            minHeight: 480,
+          }}><Image /></Sider>
+           </Layout>
+          </Content>
+        <Footer>
+          <div>medicine system</div>
+          <div>developed by Group3</div>
+        </Footer>
+      </Layout>
+
+    </Layout>
   );
 }
