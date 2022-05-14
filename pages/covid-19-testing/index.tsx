@@ -1,7 +1,23 @@
 import SiderMenu from '../component/SiderMenu';
 import { Layout } from 'antd';
+import { Popover, Button } from 'antd';
 
 const { Content } = Layout;
+
+const content1 = (
+  <div>
+    <p>where to place choice1</p>
+    <p>where to place choice1</p>
+  </div>
+);
+
+const content2 = (
+  <div>
+    <p>最近检测结果</p>
+    <p>历史检测结果</p>
+  </div>
+);
+
 export default function Covid19TestingPage() {
   return (
     <>
@@ -16,10 +32,16 @@ export default function Covid19TestingPage() {
         }}
       >
         <div>
-          <h1>新冠检测平台</h1>
+          <h1>一键式新冠检测平台</h1>
           <p>
-            在 <code>pages/covid-19-testing</code> 目录下添加 <code>.tsx</code> 文件，
-            即可在这个模块的路由下添加需要的二级路由。
+          <Popover content={content1} title="预约选择">
+            <Button type="primary">检测预约</Button>
+          </Popover>
+          <div>
+            <Popover content={content2} title="历史记录">
+              <Button type="primary">历史记录</Button>
+            </Popover>
+          </div>
           </p>
         </div>
       </Content>
