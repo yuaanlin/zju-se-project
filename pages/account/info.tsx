@@ -4,8 +4,8 @@ const { Content } = Layout
 import { request } from '../../services'
 import Avatar from "./avatar"
 import Gender from "./gender"
-import Addphase from "./AddSchedule"
-import AddSchedule from './AddSchedule'
+import Addphase from "./schedule"
+import AddSchedule from './schedule'
 
 type patient_info = 
 {   id                    : number
@@ -137,9 +137,7 @@ const DoctorInfo = ({info}:{info:doctor_info})=>{
         <Form.Item name="phone" label="电话"><Input /></Form.Item>
         <Form.Item name="email" label="邮件"><Input /></Form.Item>
         <Form.Item name="description" label="描述"><Input /></Form.Item>        
-        <Form.Item name="visitTime" label="出诊时间">
-            <AddSchedule schedulelist={info.visitTime}/>
-        </Form.Item>
+        <Form.Item name="visitTime" label="出诊时间" valuePropName="schedules"><AddSchedule /></Form.Item>
         <Button type="primary" htmlType="submit"> 修改 </Button>
         </Form>
         </Content>
