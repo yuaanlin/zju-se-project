@@ -1,7 +1,6 @@
 import SiderMenu from '../component/SiderMenu';
-import { Layout, Input, Button, Radio, Space, notification } from 'antd';
-import styles from './style.css'
-import React, { useState } from 'react';
+import { Layout, Input, Button, Radio, Space, notification, RadioChangeEvent } from 'antd';
+import React, { ChangeEvent, useState } from 'react';
 import Link from 'next/link';
 import Axios from "axios";
 
@@ -83,15 +82,15 @@ export default function LoginPage() {
     setLogInfo('');
   };
 
-  const handleAccountInputChange = (e) =>{
+  const handleAccountInputChange = (e: ChangeEvent<HTMLInputElement>) =>{
     setAccount(e.target.value);
   }
 
-  const handlePasswordInputChange = (e) =>{
+  const handlePasswordInputChange = (e: ChangeEvent<HTMLInputElement>) =>{
     setPassword(e.target.value);
   }
 
-  const handleIdentityChange = (e) =>{
+  const handleIdentityChange = (e: RadioChangeEvent) =>{
     setIdentity(e.target.value);
   }
 
