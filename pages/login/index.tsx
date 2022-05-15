@@ -2,7 +2,7 @@ import SiderMenu from '../component/SiderMenu';
 import { Layout, Input, Button, Radio, Space, notification, RadioChangeEvent } from 'antd';
 import React, { ChangeEvent, useState } from 'react';
 import Link from 'next/link';
-import Axios from "axios";
+//import Axios from "axios";
 
 const { Content } = Layout;
 
@@ -11,49 +11,49 @@ const { Content } = Layout;
 
 export default function LoginPage() {
 
-  const testAccount = "Test"
-  const testPassWord = "123" 
+  // const testAccount = "Test"
+  // const testPassWord = "123" 
 
   function loginTest(){
-    if(testAccount == account && testPassWord == password){
-      setLoginDone(true);
-      setLogInfo('');
-      notification.open({
-        message: 'Login Success',
-        description:
-          ''
-      });
-    }else{
-      setLogInfo("用户名或密码错误")
-    }
+  //   if(testAccount == account && testPassWord == password){
+  //     setLoginDone(true);
+  //     setLogInfo('');
+  //     notification.open({
+  //       message: 'Login Success',
+  //       description:
+  //         ''
+  //     });
+  //   }else{
+  //     setLogInfo("用户名或密码错误")
+  //   }
   }
 
   function login(){
-    Axios.post('http://localhost:3001/login',{
-        account: account,
-        password: password
-    }).then((response)=>{
-        if(response.data == "SUCCESS"){
-          setLoginDone(true);
-          setLogInfo('');
-        }
-        else{
-          setLogInfo(''+response.data);
-        }
-    });
+    // Axios.post('http://localhost:3001/login',{
+    //     account: account,
+    //     password: password
+    // }).then((response)=>{
+    //     if(response.data == "SUCCESS"){
+    //       setLoginDone(true);
+    //       setLogInfo('');
+    //     }
+    //     else{
+    //       setLogInfo(''+response.data);
+    //     }
+    // });
   }
 
   function register(){
-    Axios.post('http://localhost:3001/register', {
-        account: account,
-        password: password
-    }).then((response)=>{
-      notification.open({
-        message: 'Register Result',
-        description:
-          ''+response.data
-      });
-    });
+    // Axios.post('http://localhost:3001/register', {
+    //     account: account,
+    //     password: password
+    // }).then((response)=>{
+    //   notification.open({
+    //     message: 'Register Result',
+    //     description:
+    //       ''+response.data
+    //   });
+    // });
   }
 
 
@@ -155,7 +155,7 @@ export default function LoginPage() {
               onChange={handlePasswordInputChange}
             />
 
-            <h2 style={{fontSize: 12, color: "red"}}>
+            <h2 style={{fontSize: 12, color: "red", marginLeft: 420}}>
               {logInfo}
             </h2>
             <Link href="/">
