@@ -7,7 +7,7 @@ const App = () => {
     <>
       <Image
         preview={{ visible: false }}
-        width={300}
+        width={60}
         src="https://cdn1.iconfinder.com/data/icons/dental-line-smile-maker/512/Dental_medicine-512.png"
         onClick={() => setVisible(true)}
       />
