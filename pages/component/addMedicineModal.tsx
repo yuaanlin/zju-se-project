@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Modal, Form, Input, Radio } from 'antd';
+import TextArea from 'antd/lib/input/TextArea';
 import Image from '../medicine/Image';
+import { getMedication, addMedication } from '../../services/admin/medical';
 
 export enum MODAL_STATUS {
     VIEW_MEDICINE_DETAIL = 1,
@@ -9,9 +11,9 @@ export enum MODAL_STATUS {
 interface Values {
     name: string;
     category: string;
-    usage: string;
+    instruction: string;
     contraindication: string;
-    medicationCnt: number;
+    surplus: number;
 }
 
 interface AddMedicineModalProps {
@@ -27,53 +29,73 @@ const AddMedicineModal: React.FC<AddMedicineModalProps> = ({
     onCreate,
     onCancel,
 }) => {
+    const onFinish = (values: any) => {
+        console.log(values);
+    }
+
     const [form] = Form.useForm();
+    const [confirmLoading, setConfirmLoading] = useState(false);
     return (
         <Modal
             visible={visible}
             title="View Medicine Detail"
             okText="OK"
             cancelText="Cancel"
+            confirmLoading={confirmLoading}
             onCancel={onCancel}
             onOk={() => {
-                form
-                    .validateFields()
+                setConfirmLoading(true);
+                form.validateFields()
                     .then(values => {
+                        console.log(values);
+                        // TODO post to backend
+                        // addMedication(values);
                         form.resetFields();
+                        setConfirmLoading(false);
                         onCreate(values);
                     })
                     .catch(info => {
                         console.log('Validate Failed:', info);
+                        setConfirmLoading(false);
                     });
             }}
         >
-            <Image/>
+            <Image />
             <Form
                 form={form}
                 layout="vertical"
                 name="form_in_modal"
-                initialValues={{ category: 'Prescription' }}
+                onFinish={onFinish}
+                initialValues={{
+                    name: '',
+                    category: 'Prescription',
+                    instruction: '',
+                    contraindication: '',
+                    surplus: ''
+                }}
             >
-                <Form.Item
-                    name="name"
-                    label="Name"
-                    rules={[{ required: true, message: 'Please input the name of medicine!' }]}
-                >
-                    <Input />
+                <Form.Item name="name" label="Name"
+                    rules={[{ required: true, message: 'Please input the name of medicine!' }]}>
+                    <Input allowClear showCount maxLength={20} />
                 </Form.Item>
+
                 <Form.Item name="category" className="collection-create-form_last-form-item">
                     <Radio.Group>
                         <Radio value="Prescription">Prescription</Radio>
                         <Radio value="OTC">OTC</Radio>
                     </Radio.Group>
                 </Form.Item>
-                <Form.Item name="usage" label="Usage">
-                    <Input type="textarea" />
+
+                <Form.Item name="instruction" label="Instruction">
+                    <TextArea rows={3} />
                 </Form.Item>
+
                 <Form.Item name="contraindication" label="Contraindication">
-                    <Input type="textarea" />
+                    <TextArea rows={3} />
                 </Form.Item>
-                <Form.Item name="medicationCnt" label="Medication Surplus">
+
+                <Form.Item name="surplus" label="Medication Surplus"
+                    rules={[{ required: true, message: 'Please input the surplus of medicine!' }]}>
                     <Input />
                 </Form.Item>
             </Form>
