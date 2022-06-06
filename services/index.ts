@@ -15,7 +15,6 @@ type ResponseType<ResponsePayloadType> = {
 export async function request<ResponsePayloadType>(opt: RequestOption) {
   const res = await fetch(API_URL + opt.url, {
     method: opt.method,
-    mode: 'no-cors',
     body: opt.data
   });
   return await res.json() as ResponseType<ResponsePayloadType> ;

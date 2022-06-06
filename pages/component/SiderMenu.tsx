@@ -19,6 +19,10 @@ export default function SiderMenu() {
     {
       key: 'Medicine 药物系统',
       url: '/medicine'
+    },
+    {
+      key: 'Clinic 科室管理',
+      url: '/clinic'
     }
   ];
   return (

@@ -1,6 +1,7 @@
 import SiderMenu from '../component/SiderMenu';
 import AppointmentModal, { MODAL_STATUS } from '../component/AppointmentModal/index';
-import { getAppointment } from '../../services/patient/appointment';
+import { getAppointment, getClinics } from '../../services/patient/appointment';
+import ClinicModal from '../component/ClinicModal';
 import { Button, Form, Layout, Space, Table, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 // @ts-ignore
@@ -8,73 +9,29 @@ import { PlusOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
 
-function findColor(tag: number) {
-  let t = tagColor.find(x=>x.status == tag);
-  return t ? t.color : 'green';
-}
-type AppointmentType = {
+type ClinicType = {
   key: string,
-  id: number,
-  patient_id: number,
-  patient_description:string,
-  advice: string,
-  state: number,
-  docter_id: number,
-  docter_name: string,
-  clinic_id: string,
-  clinic_name: string,
-  clinic_desc: string,
-  create_time: string,
-  visit_id: number,
-  visit_time: string,
+  clinic_id: number,
+  name: string,
+  description: string
 }
 
-const tagColor = [
-  {
-    status: 0,
-    color: 'blue',
-  },
-  {
-    status: 1,
-    color: 'green',
-  },
-  {
-    status: 2,
-    color: 'volcano',
-  }
-];
 const columns = [
   {
-    title: '预约编号',
-    dataIndex: 'id',
-    key: 'id',
+    title: '科室编号',
+    dataIndex: 'clinic_id',
+    key: 'clinic_id',
     render: (text:string) => <a>{text}</a>,
   },
   {
-    title: '预约科室',
-    dataIndex: 'clinic_name',
-    key: 'clinic_name',
+    title: '科室名',
+    dataIndex: 'name',
+    key: 'name',
   },
   {
-    title: '预约医生',
-    dataIndex: 'docter_name',
-    key: 'docter_name',
-  },
-  {
-    title: '日期',
-    dataIndex: 'create_time',
-    key: 'create_time',
-  },
-  {
-    title: '状态',
-    key: 'state',
-    dataIndex: 'state',
-    //TODO: tag需要设置为interface，设置预约的状态
-    render: (tag: any) => (
-      <Tag color={findColor(tag)} key={tag}>
-        STATUS
-      </Tag>
-    ),
+    title: '科室描述',
+    dataIndex: 'description',
+    key: 'description',
   },
   {
     title: '操作',
@@ -82,37 +39,34 @@ const columns = [
     //TODO:record为表的row数据类型，创建接口
     render: (text: any, record: any) => (
       <Space size="middle">
-        <a>Update</a>
         <a>Delete</a>
       </Space>
     ),
   },
 ];
 
-export default function AppointmentPage() {
+export default function ClinicPage() {
   const [modalVisible, setModalVisible] = useState(false);
-  const [consultationId, setConsultationId] = useState('');
-  const [modalStatus, setModalStatus] = useState(MODAL_STATUS.USER_ADD_APPOINTMENT);
-  const [appTable, setAppTable] = useState<AppointmentType[]>([]);
+  const [appTable, setAppTable] = useState<ClinicType[]>([]);
   const onCreate = (values: any) => {
     console.log('Received values of form: ', values);
     setModalVisible(false);
   };
 
-  const getAppointmentList = async () => {
-    let res = await getAppointment();
+  const getClinicList = async () => {
+    let res = await getClinics();
     if (res.errorCode === 402) {
       alert(res.errorMsg);
       return;
     }
-    let newappTable = res.payload.consultationInfo.map(x => {
-      return { ...x, key: x.id.toString() };
+    let newappTable = res.payload.msg.map(x => {
+      return { ...x, key: x.clinic_id.toString() };
     });
     setAppTable(newappTable);
   };
 
   useEffect(() => {
-    getAppointmentList();
+    getClinicList();
   }, []);
   return (
     <>
@@ -126,13 +80,11 @@ export default function AppointmentPage() {
         }}
       >
         <div>
-          <h1>门诊预约/管理平台</h1>
+          <h1>科室/管理平台</h1>
           <Table
             onRow={record => {
               return {
                 onClick: () => {
-                  setModalStatus(MODAL_STATUS.DOCTOR_EDIT_ADD_APPOINTMENT);
-                  setConsultationId(record.key);
                   setModalVisible(true);
                 }
               };
@@ -145,10 +97,8 @@ export default function AppointmentPage() {
             columns={columns}
             dataSource={appTable}
           />
-          <AppointmentModal
-            modalStatus={modalStatus}
+          <ClinicModal
             visible={modalVisible}
-            consultationId={consultationId}
             onCreate={onCreate}
             onCancel={()=>{setModalVisible(false);}}
           />
@@ -160,8 +110,6 @@ export default function AppointmentPage() {
             bottom: 150
           }}
           onClick={()=>{
-            setModalStatus(MODAL_STATUS.USER_ADD_APPOINTMENT);
-            setConsultationId('');
             setModalVisible(true);
           }}
           type="primary"
