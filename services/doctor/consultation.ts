@@ -8,11 +8,20 @@ export async function treatPatient(consultationId: number) {
   });
 }
 
+type MedicationItem = {
+  medicationID: number;
+  medicationCnt: number;
+}
+type FinishConsultationBody = {
+  advice: string;
+  medications: MedicationItem[]
+}
 /** 医生接诊，将对应的问诊状态由 进行中 改为 已完成 */
-export async function finishConsultation(consultationId: number) {
+export async function finishConsultation(consultationId: number, body: FinishConsultationBody) {
   return request<{}>({
     url: `/api/doctor/consultation/${consultationId}/finishConsultation`,
     method: 'POST',
+    data: body
   });
 }
 

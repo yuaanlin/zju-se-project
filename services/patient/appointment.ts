@@ -1,5 +1,17 @@
 import { request } from '../index';
 
+type GetClinicsResponse = {
+  msg : {clinic_id: number, name: string}[]
+}
+
+/** 查看所有科室信息 */
+export async function getClinics() {
+  return request<GetClinicsResponse>({
+    url: '/api/patient/appointment/getClinics',
+    method: 'GET'
+  });
+}
+
 type GetClinicDoctorsResponse = {
   doctorInfo: {ID: number, name: string}[]
 }
@@ -39,20 +51,20 @@ type GetAppointmentResponse = {
   msg: {
     consultationID: string,
     clinic: string,
-    docName: string,
-    dateTime: string
+    doctorName: string,
+    date: string
   }[]
 }
 
 /** 获取预约 */
-export function getAppointment(patientId: string) {
+export function getAppointment() {
   return request<GetAppointmentResponse>({
-    url: `/api/patient/appointment/${patientId}/listApp`,
+    url: '/api/patient/info/getConsultationInfo',
     method: 'GET'
   });
 }
 
-type GetOneAppointmentResponse = {
+export type GetOneAppointmentResponse = {
   clinic: string
   docName: string
   docGender: string
