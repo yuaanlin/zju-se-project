@@ -1,21 +1,11 @@
 import SiderMenu from '../component/SiderMenu';
 import { Layout, Input, Button, Radio, Space, notification, RadioChangeEvent } from 'antd';
 import React, { ChangeEvent, useState } from 'react';
-import Link from 'next/link';
-import Axios from "axios";
 import { useRouter } from 'next/router';
 const { Content } = Layout;
 
 import md5 from "js-md5";
-import { request } from '../../services';
 import { createLogin, createSignup } from '../../services/utils/log';
-// import { request }
-
-//  登录/注册都是统一的格式
-type sign_info = {
-  id  : string,
-  md5 : string  //  MD5(id + password)
-}
 
 export default function LoginPage() {
 
@@ -55,7 +45,6 @@ export default function LoginPage() {
 
   const handleButtonClick = () =>{
 
-    // console.log(JSON.stringify( localStorage.getItem("login_done") ));
 
     if(account != '' && password != '' && identity != ''){
 
@@ -111,10 +100,6 @@ export default function LoginPage() {
           })
           
         }
-
-        // localStorage.setItem("identity", identity);
-        // router.push("/");
-        // console.log( localStorage.getItem("identity")  );
 
     }
 
@@ -193,9 +178,7 @@ export default function LoginPage() {
 
             <Button
               style={{width: "220px", height: "34px", fontSize: 16, marginLeft:363}}
-              // style={{width: "220px", height: "30px", lineHeight: "30px", color: 'white', background: "#3194d0", borderra-radius: "15px", margin: "10px auto", text-align: "center"}}
               type="primary"
-              // className='ButtonBox'
               onClick={handleButtonClick}
             >
               {signup? "注册" : "登录"}
