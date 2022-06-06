@@ -77,3 +77,22 @@ export async function getConsultationInfo(consultationId: string) {
     method: 'GET',
   });
 }
+
+type GetMedicationInfoResponse = {
+  medicationInfo: {
+    medication_id: number,
+    medication_name: string,
+    category: string,
+    instruction: string,
+    contraindication: string,
+    surplus: number
+  }[]
+}
+
+/** 获取药物列表 */
+export async function getAllMedicationInfo() {
+  return request<GetMedicationInfoResponse>({
+    url: '/api/doctor/medical/getAllMedication',
+    method: 'GET',
+  });
+}
