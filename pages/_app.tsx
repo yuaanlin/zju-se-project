@@ -3,12 +3,9 @@ import 'antd/dist/antd.css';
 import { Button, Layout, Menu, Space } from 'antd';
 import type { AppProps } from 'next/app';
 import Link from 'next/link';
-import LoginPage from './login';
 import { useRouter } from 'next/router';
-import { request } from '../services';
 import React, { useState } from 'react';
 import { createLogout } from '../services/utils/log';
-import { getCookieParser } from 'next/dist/server/api-utils';
 
 const { Header, Footer } = Layout;
 
