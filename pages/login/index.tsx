@@ -58,7 +58,7 @@ export default function LoginPage() {
               setPassword('');
               setAccount('');
               alert("注册成功！");
-              localStorage.setItem("identity", identity);
+              // localStorage.setItem("identity", identity);
               router.push("/");
             }
             else {  //  失败, 密码重设
@@ -85,7 +85,7 @@ export default function LoginPage() {
               setPassword('');
               setAccount('');
               alert("登录成功！");
-              localStorage.setItem("identity", identity);
+              // localStorage.setItem("identity", identity);
               router.push("/");
             }
             else {  //  失败, 密码重设
