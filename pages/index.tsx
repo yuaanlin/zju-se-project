@@ -53,6 +53,14 @@ const Home: NextPage = () => {
             </a>
           </Link>
 
+          {/* <Link href={'/login'}>
+            <a className={styles.card}>
+              <h2>登录界面 &rarr;</h2>
+              <p>
+                患者和医生可以在该界面登录自己的账号。
+              </p>
+            </a>
+          </Link> */}
         </div>
       </main>
     </div>
