@@ -4,7 +4,7 @@ import React, { ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 const { Content } = Layout;
 
-import md5 from "js-md5";
+// import md5 from "js-md5";
 import { createLogin, createSignup } from '../../services/utils/log';
 
 export default function LoginPage() {
@@ -15,12 +15,12 @@ export default function LoginPage() {
   const [account, setAccount] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
-
+  const [logInfo, setLogInfo] = useState('');
 
   // localStorage
 
   //  whether to display the info of failing in sign in or sign up
-  const [logInfo, setLogInfo] = useState('');
+  
   // const [logInfoShow, setLogInfoShow] = useState('false');
 
   const handleSwitchClick = () => {
@@ -50,7 +50,8 @@ export default function LoginPage() {
 
         if (signup) { //  注册, 医生/患者
           //  统一成一个数据包, 对应的格式都相同
-          createLogin(account, md5(account+password), identity)
+          // createLogin(account, md5(account+password), identity)
+          createLogin(account, account+password, identity)
           .then((response)=>{
             // console.log("OK")
             if ( response.errorCode == 200) { //  成功
@@ -77,7 +78,8 @@ export default function LoginPage() {
         else{         //  登录, 医生/患者/管理员
           
           //  统一成一个数据包, 对应的格式都相同
-          createSignup(account, md5(account+password), identity)
+          // createSignup(account, md5(account+password), identity)
+          createSignup(account, account+password, identity)
           .then((response)=>{
             // console.log("OK")
             if ( response.errorCode == 200) { //  成功
