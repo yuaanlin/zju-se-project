@@ -1,24 +1,42 @@
 import SiderMenu from '../component/SiderMenu';
-import { Layout } from 'antd';
-import { Popover, Button } from 'antd';
+import { Layout, Input, Button, Radio, Space, notification, RadioChangeEvent } from 'antd';
+import { Popover } from 'antd';
 
 const { Content } = Layout;
 
-const content1 = (
-  <div>
-    <p>where to place choice1</p>
-    <p>where to place choice1</p>
-  </div>
-);
 
-const content2 = (
-  <div>
-    <p>最近检测结果</p>
-    <p>历史检测结果</p>
-  </div>
-);
+
 
 export default function Covid19TestingPage() {
+  const handleButtonClick = ()=>{
+
+  }
+
+  const content1 = (
+    <div>
+      <Button
+                  style={{width: "150px", height: "34px", fontSize: 16, marginLeft:10}}
+                  // style={{width: "220px", height: "30px", lineHeight: "30px", color: 'white', background: "#3194d0", borderra-radius: "15px", margin: "10px auto", text-align: "center"}}
+                  type="primary"
+                  // className='ButtonBox'
+                  onClick={handleButtonClick}
+      >
+        一键预约
+      </Button>
+      <p>        </p>
+      <p>
+      <Button
+                  style={{width: "150px", height: "34px", fontSize: 16, marginLeft:10}}
+                  // style={{width: "220px", height: "30px", lineHeight: "30px", color: 'white', background: "#3194d0", borderra-radius: "15px", margin: "10px auto", text-align: "center"}}
+                  type="primary"
+                  // className='ButtonBox'
+                  onClick={handleButtonClick}
+      >
+        查看结果
+      </Button>
+      </p>
+    </div>
+  );
   return (
     <>
       <SiderMenu />
@@ -32,16 +50,11 @@ export default function Covid19TestingPage() {
         }}
       >
         <div>
-          <h1>一键式新冠检测平台</h1>
+          <h1>新冠检测平台</h1>
           <p>
-          <Popover content={content1} title="预约选择">
-            <Button type="primary">检测预约</Button>
+          <Popover content={content1} title="操作选择">
+            <Button type="primary">一键式核酸检测</Button>
           </Popover>
-          <div>
-            <Popover content={content2} title="历史记录">
-              <Button type="primary">历史记录</Button>
-            </Popover>
-          </div>
           </p>
         </div>
       </Content>
