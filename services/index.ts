@@ -22,7 +22,6 @@ export async function request<ResponsePayloadType>(opt: RequestOption) {
     headers,
     method: opt.method,
     body: JSON.stringify(opt.data),
-    headers:{ 'Content-Type': 'application/json' }
   });
   return await res.json() as ResponseType<ResponsePayloadType>;
 }
