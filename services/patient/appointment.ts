@@ -1,7 +1,20 @@
 import { request } from '../index';
+import { utimes } from 'fs';
+
+type GetClinicsResponse = {
+  msg : {clinic_id: number, name: string, description: string}[]
+}
+
+/** 查看所有科室信息 */
+export async function getClinics() {
+  return request<GetClinicsResponse>({
+    url: '/api/patient/appointment/getClinics',
+    method: 'GET'
+  });
+}
 
 type GetClinicDoctorsResponse = {
-  doctorInfo: {ID: number, name: string}[]
+  doctorInfo: {id: number, name: string}[]
 }
 
 /** 分科室查看下一周的出诊医生 */
@@ -13,10 +26,11 @@ export async function getClinicDoctors(clinicId: string) {
 }
 
 type GetDoctorTimeSurplusResponse = {
-  title: string
-  look: string
-  desc: string
-  visitID: string[]
+  surplus: {
+    id: number,
+    visit_time: string,
+    number_of_patient: number
+  }[]
 }
 
 /** 查看某位医生下一周的出诊时间和余量 */
@@ -36,23 +50,33 @@ export function createAppointment(visitID: string) {
 }
 
 type GetAppointmentResponse = {
-  msg: {
-    consultationID: string,
-    clinic: string,
-    docName: string,
-    dateTime: string
+  consultationInfo: {
+    id: number,
+    patient_id: number,
+    patient_description:string,
+    advice: string,
+    state: number,
+    doctor_id: number,
+    doctor_name: string,
+    clinic_id: string,
+    clinic_name: string,
+    clinic_desc: string,
+    create_time: string,
+    visit_id: number,
+    visit_time: string,
+    // date: string
   }[]
 }
 
 /** 获取预约 */
-export function getAppointment(patientId: string) {
+export function getAppointment() {
   return request<GetAppointmentResponse>({
-    url: `/api/patient/appointment/${patientId}/listApp`,
+    url: '/api/patient/info/getConsultationInfo',
     method: 'GET'
   });
 }
 
-type GetOneAppointmentResponse = {
+export type GetOneAppointmentResponse = {
   clinic: string
   docName: string
   docGender: string
@@ -66,17 +90,17 @@ type GetOneAppointmentResponse = {
 }
 
 /** 获取某一预约 */
-export function getOneAppointment(consultationId: string) {
+export function getOneAppointment(consultationId: number) {
   return request<GetOneAppointmentResponse>({
-    url: `/api/patient/appointment/${consultationId}/getApp`,
+    url: `/api/patient/info/${consultationId}/getOneConsultationInfo`,
     method: 'GET'
   });
 }
 
 /** 取消预约 */
-export function cancelAppointment(consultationId: string) {
+export function cancelAppointment(consultationId: number) {
   return request<{}>({
-    url: `/api/patient/appointment/${consultationId}/cancelApp`,
+    url: `/api/patient/info/${consultationId}/cancelConsultation`,
     method: 'POST'
   });
 }
