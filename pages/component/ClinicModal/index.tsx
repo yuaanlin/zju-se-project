@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Modal, Form, Input, Radio, Cascader, Select } from 'antd';
+import React from 'react';
+import { Form, Input, message, Modal } from 'antd';
 
 interface Values {
   title: string;
@@ -24,9 +24,9 @@ const AppointmentModal: React.FC<ClinicModalProps> = ({
   return (
     <Modal
       visible={visible}
-      title="Create a new collection"
-      okText="Create"
-      cancelText="Cancel"
+      title="新增科室"
+      okText="送出"
+      cancelText="取消"
       onCancel={() => {
         form.resetFields();
         onCancel();
@@ -38,8 +38,8 @@ const AppointmentModal: React.FC<ClinicModalProps> = ({
             form.resetFields();
             onCreate(values);
           })
-          .catch(info => {
-            console.log('Validate Failed:', info);
+          .catch(async info => {
+            await message.error(info);
           });
       }}
     >
@@ -47,15 +47,20 @@ const AppointmentModal: React.FC<ClinicModalProps> = ({
         form={form}
         layout="vertical"
         name="form_in_modal"
-        onValuesChange={(v, all)=>{
-          console.log(form.getFieldsValue());
+        style={{
+          paddingLeft: 50,
+          paddingRight: 50
         }}
-        style={{ paddingLeft: 50, paddingRight: 50 }}
       >
         <Form.Item
           name="name"
           label="科室名称"
-          rules={[{ required: true, message: '请填写科室名称' }, ]}
+          rules={[
+            {
+              required: true,
+              message: '请填写科室名称'
+            },
+          ]}
         >
           <Input />
         </Form.Item>
@@ -63,7 +68,12 @@ const AppointmentModal: React.FC<ClinicModalProps> = ({
         <Form.Item
           name="description"
           label="科室描述"
-          rules={[{ required: true, message: '请填写科室描述' }, ]}
+          rules={[
+            {
+              required: true,
+              message: '请填写科室描述'
+            },
+          ]}
         >
           <Input />
         </Form.Item>
