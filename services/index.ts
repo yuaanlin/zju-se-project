@@ -15,7 +15,8 @@ type ResponseType<ResponsePayloadType> = {
 export async function request<ResponsePayloadType>(opt: RequestOption) {
   const res = await fetch(API_URL + opt.url, {
     method: opt.method,
-    body: opt.data
+    body: JSON.stringify(opt.data),
+    headers:{ 'Content-Type': 'application/json' }
   });
   return await res.json() as ResponseType<ResponsePayloadType> ;
 }

@@ -1,10 +1,8 @@
 import SiderMenu from '../component/SiderMenu';
-import AppointmentModal, { MODAL_STATUS } from '../component/AppointmentModal/index';
-import { getAppointment, getClinics } from '../../services/patient/appointment';
+import { getClinics } from '../../services/patient/appointment';
 import ClinicModal from '../component/ClinicModal';
 import { Button, Layout, message, Space, Table } from 'antd';
 import { useEffect, useState } from 'react';
-// @ts-ignore
 import { PlusOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
@@ -49,7 +47,6 @@ export default function ClinicPage() {
   const [modalVisible, setModalVisible] = useState(false);
   const [appTable, setAppTable] = useState<ClinicType[]>([]);
   const onCreate = (values: any) => {
-    console.log('Received values of form: ', values);
     setModalVisible(false);
   };
 

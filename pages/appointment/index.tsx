@@ -1,9 +1,8 @@
 import SiderMenu from '../component/SiderMenu';
 import AppointmentModal, { MODAL_STATUS } from '../component/AppointmentModal/index';
 import { cancelAppointment, getAppointment } from '../../services/patient/appointment';
-import { Button, Form, Layout, message, Space, Table, Tag } from 'antd';
+import { Button, Layout, message, Space, Table, Tag } from 'antd';
 import { useEffect, useState } from 'react';
-// @ts-ignore
 import { PlusOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
@@ -49,11 +48,11 @@ export default function AppointmentPage() {
   const [consultationId, setConsultationId] = useState<number|undefined>(undefined);
   const [modalStatus, setModalStatus] = useState(MODAL_STATUS.USER_ADD_APPOINTMENT);
   const [appTable, setAppTable] = useState<AppointmentType[]>([]);
+
   const onCreate = () => {
     getAppointmentList();
     setModalVisible(false);
   };
-
   const cancelApp = async (appointmentId : number) => {
     try {
       let res = await cancelAppointment(appointmentId);
@@ -193,7 +192,12 @@ export default function AppointmentPage() {
             visible={modalVisible}
             consultationId={consultationId}
             onCreate={onCreate}
-            onCancel={()=>{setModalVisible(false);}}
+            onCancel={
+              ()=>{
+                getAppointmentList();
+                setModalVisible(false);
+              }
+            }
           />
         </div>
         <Button
