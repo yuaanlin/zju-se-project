@@ -1,16 +1,36 @@
 import SiderMenu from '../component/SiderMenu';
 import { Layout, Input, Button, Radio, Space, notification, RadioChangeEvent } from 'antd';
 import { Popover } from 'antd';
-
+import AppointmentModal, { MODAL_STATUS } from '../component/AppointmentModal/index';
 const { Content } = Layout;
-
-
+import { useEffect, useState } from 'react';
+import{getLatestCovidResultResponse,postCovidAppoitment,
+  postCovidResult}from '../../services/covid/covidTest';
 
 
 export default function Covid19TestingPage() {
+  const [modalVisible, setModalVisible] = useState(false);
   const handleButtonClick = ()=>{
+    postCovidAppoitment().then(
+      (response)=>{
+        if ( response.errorCode == 200){
+          alert("核酸注册成功！");
+        }else{
+          alert("核酸注册失败！");
+        }
+      }
+    ).catch(()=>{
+      alert("请检查网络！");
+    })
+  }
+
+  const handleResultButtonClick = ()=>{
 
   }
+
+  const onCreate = () => {
+    setModalVisible(false);
+  };
 
   const content1 = (
     <div>
@@ -30,7 +50,7 @@ export default function Covid19TestingPage() {
                   // style={{width: "220px", height: "30px", lineHeight: "30px", color: 'white', background: "#3194d0", borderra-radius: "15px", margin: "10px auto", text-align: "center"}}
                   type="primary"
                   // className='ButtonBox'
-                  onClick={handleButtonClick}
+                  onClick={handleResultButtonClick}
       >
         查看结果
       </Button>
@@ -57,6 +77,13 @@ export default function Covid19TestingPage() {
           </Popover>
           </p>
         </div>
+        <AppointmentModal
+            modalStatus={1}
+            visible={false}
+            consultationId={undefined}
+            onCreate={onCreate}
+            onCancel={()=>{setModalVisible(false);}}
+          />
       </Content>
     </>
   );
