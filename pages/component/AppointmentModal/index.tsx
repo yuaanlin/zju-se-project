@@ -1,15 +1,10 @@
 import AddAppointmentForm from './addAppointmentForm';
 import ViewAppointmentForm from './viewAppointmentForm';
 import AddAdviceAppointmentForm from './addAdviceAppointmentForm';
-import {
-  cancelAppointment,
-  createAppointment,
-  getClinicDoctors,
-  getDoctorTimeSurplus
-} from '../../../services/patient/appointment';
-import { finishConsultation } from '../../../services/doctor/consultation';
-import React, { useEffect, useState } from 'react';
-import { Button, Modal, Form, Input, Radio, Cascader } from 'antd';
+import { createAppointment } from '../../../services/patient/appointment';
+import { finishConsultation, MedicationItem } from '../../../services/doctor/consultation';
+import React from 'react';
+import { Modal, Form, message } from 'antd';
 
 export enum MODAL_STATUS {
   USER_ADD_APPOINTMENT = 1,
@@ -27,7 +22,7 @@ interface Values {
 interface AppointmentModalProps {
   modalStatus: MODAL_STATUS;
   visible: boolean;
-  consultationId : string;
+  consultationId : number | undefined;
   onCreate: (values: Values) => void;
   onCancel: () => void;
 }
@@ -39,23 +34,17 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   onCreate,
   onCancel,
 }) => {
-
   const [form] = Form.useForm();
 
   const createApp = async (visitId : string) => {
     try {
       let res = await createAppointment(visitId);
-      console.log('create success');
-    } catch (e) {
-      console.log(e);
-      alert(e);
-    }
-  };
-
-  const cancelApp = async (appointmentId : string) => {
-    try {
-      let res = await cancelAppointment(appointmentId);
-      console.log('delete success');
+      if (res.errorCode != 200) {
+        message.error(res.errorMsg);
+        return;
+      }
+      message.success('预约创建成功;)');
+      return res;
     } catch (e) {
       console.log(e);
       alert(e);
@@ -63,14 +52,38 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   };
 
   //TODO: 更新医嘱
-  const updateApp = async (appointmentId : number) => {
+  const updateApp = async (advice: string, medications: Array<MedicationItem>) => {
     try {
-      let res = await finishConsultation(appointmentId, { advice: form.getFieldValue('advice'), medications: form.getFieldValue('medications') });
-      console.log('update success');
+      if (!consultationId) {
+        message.error('获取预约出错');
+        return;
+      }
+      let res = await finishConsultation(consultationId, { advice: advice, medications: medications });
+      if (res.errorCode != 200) {
+        message.error(res.errorMsg);
+        return;
+      }
+      message.success('医嘱添加成功;)');
+      return res;
     } catch (e) {
       console.log(e);
       alert(e);
     }
+  };
+
+  const setModeFunction = (values: any) => {
+    let res;
+    if(modalStatus === MODAL_STATUS.USER_ADD_APPOINTMENT) {
+      res = createApp(values.time);
+    } else if (modalStatus === MODAL_STATUS.DOCTOR_EDIT_ADD_APPOINTMENT) {
+      res = updateApp(values.advice, values.medications);
+    }
+    return res;
+  };
+  const onOK = async (values: any) => {
+    form.resetFields();
+    let res = await setModeFunction(values);
+    onCreate(values);
   };
   return (
     <Modal
@@ -85,10 +98,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
       onOk={() => {
         form
           .validateFields()
-          .then(values => {
-            form.resetFields();
-            onCreate(values);
-          })
+          .then(onOK)
           .catch(info => {
             console.log('Validate Failed:', info);
           });
@@ -99,16 +109,16 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
         layout="vertical"
         name="form_in_modal"
         onValuesChange={(v, all)=>{
-          console.log(form.getFieldsValue());
+          console.log(all);
         }}
         style={{ paddingLeft: 50, paddingRight: 50 }}
       >
         {
           modalStatus === MODAL_STATUS.USER_ADD_APPOINTMENT ?
             <AddAppointmentForm /> :
-            modalStatus === MODAL_STATUS.USER_VIEW_APPOINTMENT && consultationId != '' ?
+            modalStatus === MODAL_STATUS.USER_VIEW_APPOINTMENT && consultationId ?
               <ViewAppointmentForm consultationId={consultationId} form={form}/> :
-              modalStatus === MODAL_STATUS.DOCTOR_EDIT_ADD_APPOINTMENT && consultationId != '' ?
+              modalStatus === MODAL_STATUS.DOCTOR_EDIT_ADD_APPOINTMENT && consultationId ?
                 <AddAdviceAppointmentForm consultationId={consultationId} form={form} /> : null
         }
       </Form>

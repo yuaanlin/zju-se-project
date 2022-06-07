@@ -8,7 +8,7 @@ export async function treatPatient(consultationId: number) {
   });
 }
 
-type MedicationItem = {
+export type MedicationItem = {
   medicationID: number;
   medicationCnt: number;
 }
@@ -74,6 +74,25 @@ type GetConsultationInfoResponse = {
 export async function getConsultationInfo(consultationId: string) {
   return request<GetConsultationInfoResponse>({
     url: `/api/doctor/consultation/${consultationId}/getConsultationInfo`,
+    method: 'GET',
+  });
+}
+
+type GetMedicationInfoResponse = {
+  medicationInfo: {
+    medication_id: number,
+    medication_name: string,
+    category: string,
+    instruction: string,
+    contraindication: string,
+    surplus: number
+  }[]
+}
+
+/** 获取药物列表 */
+export async function getAllMedicationInfo() {
+  return request<GetMedicationInfoResponse>({
+    url: '/api/doctor/medical/getAllMedication',
     method: 'GET',
   });
 }

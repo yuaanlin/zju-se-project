@@ -8,7 +8,7 @@ import React, { useEffect, useState } from 'react';
 import { Input, Form, FormInstance } from 'antd';
 
 interface ViewAppointmentFormProps {
-  consultationId: string;
+  consultationId: number;
   form: FormInstance;
 }
 
@@ -17,7 +17,7 @@ const ViewAppointmentForm: React.FC<ViewAppointmentFormProps> = ({
   form
 }) => {
   // TODO: 根据id找到appointment值，显示即可
-  const getAppointmentInfo = async (value: string) => {
+  const getAppointmentInfo = async (value: number) => {
     let res = await getOneAppointment(value);
     if (res.errorCode === 401) {
       console.log(res.errorMsg);
