@@ -1,9 +1,15 @@
-import { getClinicDoctors, getDoctorTimeSurplus, getOneAppointment } from '../../../services/patient/appointment';
+import {
+  getClinicDoctors,
+  getClinics,
+  getDoctorTimeSurplus,
+  getOneAppointment
+} from '../../../services/patient/appointment';
+import { getAllMedicationInfo } from '../../../services/doctor/consultation';
 import React, { useEffect, useState } from 'react';
-import { Input, Form, FormInstance, Select } from 'antd';
+import { Input, Form, FormInstance, Select, message } from 'antd';
 
 interface AddAdviceAppointmentFormProps {
-  consultationId: string;
+  consultationId: number;
   form: FormInstance;
 }
 
@@ -11,13 +17,13 @@ const AddAdviceAppointmentForm: React.FC<AddAdviceAppointmentFormProps> = ({
   consultationId,
   form
 }) => {
-
   const [medicineList, setMedicineList] = useState<{label:string, value: number}[]>([]);
 
-  const getAppointmentInfo = async (value: string) => {
+  const getAppointmentInfo = async (value: number) => {
     let res = await getOneAppointment(value);
-    if (res.errorCode === 401) {
+    if (res.errorCode != 200) {
       console.log(res.errorMsg);
+      message.error(res.errorMsg);
       return;
     }
     let currentAppointent = res.payload;
@@ -26,12 +32,21 @@ const AddAdviceAppointmentForm: React.FC<AddAdviceAppointmentFormProps> = ({
 
   // TODO:查找药物列表
   const getMedicineList = async () => {
-
+    let res = await getAllMedicationInfo();
+    if (res.errorCode != 200) {
+      console.log(res.errorMsg);
+      message.error(res.errorMsg);
+      return;
+    }
+    let newMedicationList = res.payload.medicationInfo.map(x => {
+      return { label: x.medication_name, value: x.medication_id };
+    });
+    setMedicineList(newMedicationList);
   };
 
   useEffect(() => {
-    getAppointmentInfo(consultationId);
-    console.log(form.getFieldsValue());
+    // getAppointmentInfo(consultationId);
+    getMedicineList();
   }, []);
 
   return (
@@ -77,7 +92,8 @@ const AddAdviceAppointmentForm: React.FC<AddAdviceAppointmentFormProps> = ({
         rules={[{ required: true, message: '请添加药物' }, ]}
       >
         <Select
-          // onChange={onClinicChange}
+          mode="multiple"
+          allowClear
           options={medicineList}
         />
       </Form.Item>

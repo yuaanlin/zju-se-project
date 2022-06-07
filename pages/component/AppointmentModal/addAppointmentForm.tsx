@@ -1,15 +1,16 @@
 import { getClinicDoctors, getClinics, getDoctorTimeSurplus } from '../../../services/patient/appointment';
 import React, { useEffect, useState } from 'react';
-import { Cascader, Form, Select } from 'antd';
+import { Cascader, Form, message, Select } from 'antd';
 
 const AddAppointmentForm: React.FC = ({}) => {
 
   const [clinicList, setClinicList] = useState<{label:string, value: number}[]>([]);
   const [docterList, setDocterList] = useState<{label:string, value: number}[]>([]);
-  const [timeSurplus, setTimeSurplus] = useState<{label:string, value: string}[]>([]);
+  const [timeSurplus, setTimeSurplus] = useState<{label:string, value: number}[]>([]);
 
   const getClinicList = async () => {
     let res = await getClinics();
+    //TODO: 报错
     if (res.errorCode === 401) {
       console.log(res.errorMsg);
       return;
@@ -21,24 +22,51 @@ const AddAppointmentForm: React.FC = ({}) => {
   };
   const onClinicChange = async (value: any) => {
     let res = await getClinicDoctors(value);
-    if (res.errorCode === 401) {
-      console.log(res.errorMsg);
+    if (res.errorCode != 200) {
+      message.error(res.errorMsg);
       return;
     }
     let newDocterList = res.payload.doctorInfo.map(x => {
-      return { label: x.name, value: x.ID };
+      return { label: x.name, value: x.id };
     });
+    console.log(newDocterList);
     setDocterList(newDocterList);
   };
 
   const onDocterChange = async (value: any) => {
     let res = await getDoctorTimeSurplus(value);
-    if (res.errorCode === 401) {
-      console.log(res.errorMsg);
+    if (res.errorCode != 200) {
+      message.error(res.errorMsg);
       return;
     }
-    let newTimeSurplus = res.payload.visitID.map(x => {
-      return { label: x, value: x };
+    let newTimeSurplus = res.payload.surplus.map(x => {
+      let date = x.visit_time.substring(0, 1);
+      let time = x.visit_time.substring(-1);
+      switch (date){
+        case '1':
+          date = '星期一';
+          break;
+        case '2':
+          date = '星期二';
+          break;
+        case '3':
+          date = '星期三';
+          break;
+        case '4':
+          date = '星期四';
+          break;
+        case '5':
+          date = '星期五';
+          break;
+        case '6':
+          date = '星期六';
+          break;
+        case '7':
+          date = '星期天';
+          break;
+      }
+      time = time === '1' ? '上午' : '下午';
+      return { label: date + time, value: x.id };
     });
     setTimeSurplus(newTimeSurplus);
   };
@@ -46,6 +74,7 @@ const AddAppointmentForm: React.FC = ({}) => {
   useEffect(() => {
     getClinicList();
   }, []);
+
   return (
     <>
       <Form.Item
@@ -54,19 +83,19 @@ const AddAppointmentForm: React.FC = ({}) => {
         rules={[{ required: true, message: '请选择就诊科室!' }, ]}
       >
         <Select
-          // onChange={onClinicChange}
+          onChange={onClinicChange}
           options={clinicList}
         />
       </Form.Item>
 
       <Form.Item
-        shouldUpdate={(prevValues, currentValues) => prevValues.clinic !== currentValues.clinic}
+        shouldUpdate={true}
         name="doctors"
         label="医生"
         rules={[{ required: true, message: '请选择医生!' }, ]}
       >
         <Select
-          // onChange={onDocterChange}
+          onChange={onDocterChange}
           options={docterList}
         />
       </Form.Item>

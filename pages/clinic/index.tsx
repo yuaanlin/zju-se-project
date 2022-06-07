@@ -2,7 +2,7 @@ import SiderMenu from '../component/SiderMenu';
 import AppointmentModal, { MODAL_STATUS } from '../component/AppointmentModal/index';
 import { getAppointment, getClinics } from '../../services/patient/appointment';
 import ClinicModal from '../component/ClinicModal';
-import { Button, Form, Layout, Space, Table, Tag } from 'antd';
+import { Button, Layout, message, Space, Table } from 'antd';
 import { useEffect, useState } from 'react';
 // @ts-ignore
 import { PlusOutlined } from '@ant-design/icons';
@@ -55,8 +55,8 @@ export default function ClinicPage() {
 
   const getClinicList = async () => {
     let res = await getClinics();
-    if (res.errorCode === 402) {
-      alert(res.errorMsg);
+    if (res.errorCode != 200) {
+      message.error(res.errorMsg);
       return;
     }
     let newappTable = res.payload.msg.map(x => {
