@@ -21,7 +21,7 @@ export async function request<ResponsePayloadType>(opt: RequestOption) {
   const res = await fetch(API_URL + opt.url, {
     headers,
     method: opt.method,
-    body: opt.data
+    body: JSON.stringify(opt.data),
   });
   return await res.json() as ResponseType<ResponsePayloadType>;
 }

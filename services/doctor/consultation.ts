@@ -8,7 +8,7 @@ export async function treatPatient(consultationId: number) {
   });
 }
 
-type MedicationItem = {
+export type MedicationItem = {
   medicationID: number;
   medicationCnt: number;
 }
