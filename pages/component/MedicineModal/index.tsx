@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Form } from 'antd';
-import { addMedication, updateMedication } from '../../../services/admin/medicine';
 import { AddMedicationBody, UpdateMedicationBody } from '../../../services/admin/medicine';
+import { addMedication, updateMedication } from '../../../services/admin/medicine';
 import AddMedicineForm from './addMedicineForm';
 import ViewMedicineForm from './viewMedicineForm';
 
@@ -24,7 +24,7 @@ type MedicationInfo = {
 interface MedicineModalProps {
     modalStatus: MODAL_STATUS;
     visible: boolean;
-    medicationInfo: MedicationInfo | undefined;
+    medicationInfo?: MedicationInfo;
     onCreate: () => void;
     onCancel: () => void;
 }
@@ -36,14 +36,25 @@ const MedicineModal: React.FC<MedicineModalProps> = ({
     onCreate,
     onCancel,
 }) => {
-    const [form] = Form.useForm();
+    const [form] = Form.useForm<MedicationInfo>();
+    const [title, setTitle] = useState('');
     const [confirmLoading, setConfirmLoading] = useState(false);
+    const emptyValue: MedicationInfo = {
+        key: '-1',
+        medication_id: -1,
+        name: '',
+        category: '',
+        instruction: '',
+        contraindication: '',
+        surplus: 0
+    }
 
     const addMedicationAgent = async (body: AddMedicationBody) => {
         console.log('addMedicationAgent(): ', body);
         let res = await addMedication(body);
         if (res.errorCode != 200) alert(res.errorMsg);
         else console.log(res.errorMsg);
+        return res;
     };
 
     const updateMedicationAgent = async (medicationId: number, body: UpdateMedicationBody) => {
@@ -51,67 +62,88 @@ const MedicineModal: React.FC<MedicineModalProps> = ({
         let res = await updateMedication(medicationId, body);
         if (res.errorCode != 200) alert(res.errorMsg);
         else console.log(res.errorMsg);
+        return res;
     };
+
+    useEffect(() => {
+        console.log('MedicineModal useEffect()', medicationInfo);
+        form.setFieldsValue(medicationInfo != undefined ? medicationInfo : emptyValue);
+        console.log(form.getFieldsValue());
+    }, [medicationInfo]);
+
+    useEffect(() => {
+        switch (modalStatus) {
+            case MODAL_STATUS.VIEW_MEDICINE_DETAIL:
+                setTitle('View Medication Detail');
+                break;
+            case MODAL_STATUS.ADMIN_ADD_MEDICATION:
+                setTitle('Add Medication');
+                break;
+            case MODAL_STATUS.ADMIN_UPDATE_MEDICATION:
+                setTitle('Update Medication');
+                break;
+        }
+    }, [modalStatus]);
 
     return (
         <Modal
             visible={visible}
-            title={modalStatus == MODAL_STATUS.VIEW_MEDICINE_DETAIL
-                ? "View Medication Detail"
-                : modalStatus == MODAL_STATUS.ADMIN_ADD_MEDICATION
-                    ? "Add Medication"
-                    : "Update Medication"}
-            okText="OK"
-            cancelText="Cancel"
+            title={title}
             confirmLoading={confirmLoading}
-            onCancel={() => {
-                form.resetFields();
-                onCancel();
-            }}
             onOk={() => {
                 switch (modalStatus) {
                     case MODAL_STATUS.VIEW_MEDICINE_DETAIL: {
-                        onCancel();
                         break;
                     }
                     case MODAL_STATUS.ADMIN_ADD_MEDICATION: {
                         setConfirmLoading(true);
                         form.validateFields()
-                            .then(values => {
-                                addMedicationAgent(values);
-                                form.resetFields();
+                            .then(async values => {
+                                let res = await addMedicationAgent(values);
                                 setConfirmLoading(false);
-                                onCreate();
+                                if (res.errorCode == 200) {
+                                    onCreate();
+                                    form.resetFields();
+                                }
                             })
                             .catch(info => {
-                                console.log('Validate Failed:', info);
                                 setConfirmLoading(false);
+                                console.log('Validate Failed:', info);
                             });
                         break;
                     }
                     case MODAL_STATUS.ADMIN_UPDATE_MEDICATION: {
                         setConfirmLoading(true);
                         form.validateFields()
-                            .then(values => {
-                                if (medicationInfo != undefined)
-                                    updateMedicationAgent(medicationInfo.medication_id, values);
-                                form.resetFields();
-                                setConfirmLoading(false);
-                                onCreate();
+                            .then(async values => {
+                                if (medicationInfo != undefined) {
+                                    let res = await updateMedicationAgent(medicationInfo.medication_id, values);
+                                    setConfirmLoading(false);
+                                    if (res.errorCode == 200) {
+                                        onCreate();
+                                        form.resetFields();
+                                    }
+                                }
                             })
                             .catch(info => {
-                                console.log('Validate Failed:', info);
                                 setConfirmLoading(false);
+                                console.log('Validate Failed:', info);
                             });
                         break;
                     }
                 }
-
             }}
+            onCancel={onCancel}
         >
-            {modalStatus == MODAL_STATUS.VIEW_MEDICINE_DETAIL
-                ? <ViewMedicineForm values={medicationInfo} />
-                : <AddMedicineForm form={form} />}
+            <Form
+                form={form}
+                name="form_in_modal"
+                initialValues={form.getFieldsValue()}
+            >
+                {modalStatus == MODAL_STATUS.VIEW_MEDICINE_DETAIL
+                    ? <ViewMedicineForm form={form} />
+                    : <AddMedicineForm form={form} />}
+            </Form>
         </Modal >
     );
 };

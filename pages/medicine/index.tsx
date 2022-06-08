@@ -24,46 +24,16 @@ function findColor(surplus: number) {
 
 const tagColor = [
     {
-        status: 10,
+        status: 100,
         color: 'green',
     },
     {
-        status: 1,
+        status: 10,
         color: 'yellow',
     },
     {
-        status: 0,
+        status: 1,
         color: 'volcano',
-    },
-];
-
-const data = [
-    {
-        key: "1",
-        medication_id: 1,
-        name: '阿司匹林',
-        category: 'OTC',
-        instruction: '成人口服一次0.3~0.6g，一日3次，必要时每4小时1次。',
-        contraindication: '非甾体抗炎药过敏者禁用。',
-        surplus: 0,
-    },
-    {
-        key: "2",
-        medication_id: 2,
-        name: '999感冒灵',
-        category: 'OTC',
-        instruction: '开水冲服，一次1袋，一日3次。',
-        contraindication: '严重肝肾功能不全者禁用。',
-        surplus: 1,
-    },
-    {
-        key: "3",
-        medication_id: 3,
-        name: '板蓝根',
-        category: '中药',
-        instruction: '煎服，9-15g。',
-        contraindication: '体虚而无实火热毒者忌服，脾胃虚寒者慎用。',
-        surplus: 10,
     },
 ];
 
@@ -72,8 +42,19 @@ export default function MedicinePage() {
     const [modalVisible, setModalVisible] = useState(false);
     const [medicineTable, setMedicineTable] = useState<MedicationInfo[]>([]);
     const [medicationInfo, setMedicationInfo] = useState<MedicationInfo>();
-    const onCreate = () => {
-        setModalVisible(false);
+
+    const getMedicationList = async () => {
+        console.log('getMedicationList()');
+        let res = await getAllMedication();
+        console.log(res);
+        if (res.errorCode != 200) {
+            alert(res.errorMsg);
+            return;
+        }
+        let newMedicineTable = res.payload.medicationInfo.map(x => {
+            return { key: x.medication_id.toString(), name: x.medication_name, ...x };
+        });
+        setMedicineTable(newMedicineTable);
     };
 
     const deleteMedicationAgent = async (medicationId: number) => {
@@ -81,21 +62,18 @@ export default function MedicinePage() {
         let res = await deleteMedication(medicationId);
         if (res.errorCode != 200) alert(res.errorMsg);
         else console.log(res.errorMsg);
+        return res;
     };
 
-    const getMedicationList = async () => {
-        // let res = await getAllMedication();
-        // if (res.errorCode == 402) {
-        //     alert(res.errorMsg);
-        //     return;
-        // }
-        // let newMedicineTable = res.payload.medicationInfo.map(x => {
-        //     return { key: x.medication_id.toString(), ...x };
-        // });
-        let newMedicineTable = data;
-        setMedicineTable(newMedicineTable);
+    const onCreate = async () => {
+        getMedicationList();
+        setModalVisible(false);
     };
 
+    const onCancel = async () => {
+        getMedicationList();
+        setModalVisible(false);
+    }
 
     const columns = [
         {
@@ -145,16 +123,17 @@ export default function MedicinePage() {
                 <Space size="middle">
                     <Typography.Link onClick={() => {
                         console.log('table record update onclick: ', record);
-                        setMedicationInfo(record);
                         setModalStatus(MODAL_STATUS.ADMIN_UPDATE_MEDICATION);
+                        setMedicationInfo(record);
                         setModalVisible(true);
                     }}>
                         Update
                     </Typography.Link>
 
-                    <Popconfirm title='确认删除' onConfirm={() => {
+                    <Popconfirm title='确认删除' onConfirm={async () => {
                         console.log('table record delete onclick: ', record);
-                        deleteMedicationAgent(record.medication_id);
+                        let res = await deleteMedicationAgent(record.medication_id);
+                        if (res.errorCode == 200) onCreate();
                     }}>
                         <a>Delete</a>
                     </Popconfirm>
@@ -193,7 +172,7 @@ export default function MedicinePage() {
                     visible={modalVisible}
                     medicationInfo={medicationInfo}
                     onCreate={onCreate}
-                    onCancel={() => { setModalVisible(false); }}
+                    onCancel={onCancel}
                 />
                 <Button
                     style={{
@@ -202,8 +181,8 @@ export default function MedicinePage() {
                         bottom: 150
                     }}
                     onClick={() => {
-                        setMedicationInfo(undefined);
                         setModalStatus(MODAL_STATUS.ADMIN_ADD_MEDICATION);
+                        setMedicationInfo(undefined);
                         setModalVisible(true);
                     }}
                     type="primary"

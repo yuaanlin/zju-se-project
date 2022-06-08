@@ -1,23 +1,22 @@
 import React from 'react';
-import { Form, Input, InputNumber } from 'antd';
-import { GetMedicationResponse } from '../../../services/admin/medicine';
+import { Form, FormInstance, Input, InputNumber, Radio } from 'antd';
 
 interface ViewMedicationFormProps {
-    values: GetMedicationResponse | undefined
+    form: FormInstance<any>
 }
 
-const ViewMedicineForm: React.FC<ViewMedicationFormProps> = ({ values }) => {
+const ViewMedicineForm: React.FC<ViewMedicationFormProps> = ({ form }) => {
     return (
-        <Form
-            name="form_in_modal"
-            initialValues={values}
-        >
+        <>
             <Form.Item name="name" label="药品名称">
                 <Input disabled />
             </Form.Item>
 
             <Form.Item name="category" label="药品种类" className="collection-create-form_last-form-item">
-                <Input disabled />
+                <Radio.Group disabled>
+                    <Radio value="处方药">处方药</Radio>
+                    <Radio value="非处方药">非处方药</Radio>
+                </Radio.Group>
             </Form.Item>
 
             <Form.Item name="instruction" label="用法用量">
@@ -31,7 +30,7 @@ const ViewMedicineForm: React.FC<ViewMedicationFormProps> = ({ values }) => {
             <Form.Item name="surplus" label="药品数量">
                 <InputNumber disabled />
             </Form.Item>
-        </Form>
+        </>
     );
 };
 export default ViewMedicineForm;

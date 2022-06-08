@@ -16,7 +16,7 @@ export async function addMedication(body: AddMedicationBody) {
     return request<{}>({
         url: '/api/admin/medical/addMedication',
         method: 'POST',
-        data: body
+        data: { usage: body.instruction, ...body }
     });
 }
 
@@ -35,13 +35,18 @@ export async function updateMedication(medicationId: number, body: UpdateMedicat
     return request<{}>({
         url: `/api/admin/medical/${medicationId}/updateMedication`,
         method: 'POST',
-        data: body
+        data: { usage: body.instruction, ...body }
     });
 }
 
 export type GetMedicationResponse = {
     medication_id: number
-} & MedicationInfo
+    medication_name: string
+    category: string,
+    instruction: string,
+    contraindication: string,
+    surplus: number
+}
 
 /** 管理员查询药品 */
 export async function getMedication(medicationId: number) {

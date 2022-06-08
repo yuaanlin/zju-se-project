@@ -7,17 +7,7 @@ interface AddMedicationFormProps {
 
 const AddMedicineForm: React.FC<AddMedicationFormProps> = ({ form }) => {
     return (
-        <Form
-            form={form}
-            name="form_in_modal"
-            initialValues={{
-                name: '',
-                category: 'Prescription',
-                instruction: '',
-                contraindication: '',
-                surplus: 0
-            }}
-        >
+        <>
             <Form.Item name="name" label="药品名称"
                 rules={[{ required: true, message: '请输入药品名称' }]}>
                 <Input allowClear showCount maxLength={20} />
@@ -25,8 +15,8 @@ const AddMedicineForm: React.FC<AddMedicationFormProps> = ({ form }) => {
 
             <Form.Item name="category" label="药品种类" className="collection-create-form_last-form-item">
                 <Radio.Group>
-                    <Radio value="Prescription">处方药</Radio>
-                    <Radio value="OTC">非处方药</Radio>
+                    <Radio value="处方药">处方药</Radio>
+                    <Radio value="非处方药">非处方药</Radio>
                 </Radio.Group>
             </Form.Item>
 
@@ -41,7 +31,7 @@ const AddMedicineForm: React.FC<AddMedicationFormProps> = ({ form }) => {
             <Form.Item name="surplus" label="药品数量">
                 <InputNumber />
             </Form.Item>
-        </Form>
+        </>
     );
 };
 export default AddMedicineForm;
