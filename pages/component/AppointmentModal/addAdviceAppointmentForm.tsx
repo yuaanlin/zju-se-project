@@ -1,9 +1,5 @@
-import {
-  getClinicDoctors,
-  getClinics,
-  getDoctorTimeSurplus,
-  getOneAppointment
-} from '../../../services/patient/appointment';
+import { getVisitTime } from './addAppointmentForm';
+import { getOneAppointment } from '../../../services/patient/appointment';
 import { getAllMedicationInfo, treatPatient } from '../../../services/doctor/consultation';
 import React, { useEffect, useState } from 'react';
 import { Input, Form, FormInstance, Select, message, Button } from 'antd';
@@ -26,7 +22,8 @@ const AddAdviceAppointmentForm: React.FC<AddAdviceAppointmentFormProps> = ({
       message.error(res.errorMsg);
       return;
     }
-    let currentAppointent = res.payload;
+    let currentAppointent = res.payload.ConsultationRecord;
+    currentAppointent.visit_time = getVisitTime(currentAppointent.visit_time);
     form.setFieldsValue(currentAppointent);
   };
 
@@ -60,7 +57,7 @@ const AddAdviceAppointmentForm: React.FC<AddAdviceAppointmentFormProps> = ({
   return (
     <>
       <Form.Item
-        name="clinic"
+        name="clinic_name"
         label="科室"
       >
         <Input
@@ -69,7 +66,7 @@ const AddAdviceAppointmentForm: React.FC<AddAdviceAppointmentFormProps> = ({
       </Form.Item>
 
       <Form.Item
-        name="docter"
+        name="doctor_name"
         label="医生"
       >
         <Input
@@ -78,7 +75,7 @@ const AddAdviceAppointmentForm: React.FC<AddAdviceAppointmentFormProps> = ({
       </Form.Item>
 
       <Form.Item
-        name="time"
+        name="visit_time"
         label="就诊时间"
       >
         <Input

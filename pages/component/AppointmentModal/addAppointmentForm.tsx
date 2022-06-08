@@ -1,7 +1,35 @@
 import { getClinicDoctors, getClinics, getDoctorTimeSurplus } from '../../../services/patient/appointment';
 import React, { useEffect, useState } from 'react';
 import { Cascader, Form, message, Select } from 'antd';
-
+export const getVisitTime = (visit_time: string) => {
+  let date = visit_time.substring(0, 1);
+  let time = visit_time.substring(-1);
+  switch (date){
+    case '1':
+      date = '星期一';
+      break;
+    case '2':
+      date = '星期二';
+      break;
+    case '3':
+      date = '星期三';
+      break;
+    case '4':
+      date = '星期四';
+      break;
+    case '5':
+      date = '星期五';
+      break;
+    case '6':
+      date = '星期六';
+      break;
+    case '7':
+      date = '星期天';
+      break;
+  }
+  time = time === '1' ? '上午' : '下午';
+  return date + time;
+};
 const AddAppointmentForm: React.FC = ({}) => {
 
   const [clinicList, setClinicList] = useState<{label:string, value: number}[]>([]);
@@ -10,9 +38,9 @@ const AddAppointmentForm: React.FC = ({}) => {
 
   const getClinicList = async () => {
     let res = await getClinics();
-    //TODO: 报错
-    if (res.errorCode === 401) {
+    if (res.errorCode != 200) {
       console.log(res.errorMsg);
+      message.error(res.errorMsg);
       return;
     }
     let newClinicList = res.payload.msg.map(x => {
@@ -29,7 +57,6 @@ const AddAppointmentForm: React.FC = ({}) => {
     let newDocterList = res.payload.doctorInfo.map(x => {
       return { label: x.name, value: x.id };
     });
-    console.log(newDocterList);
     setDocterList(newDocterList);
   };
 
@@ -40,33 +67,8 @@ const AddAppointmentForm: React.FC = ({}) => {
       return;
     }
     let newTimeSurplus = res.payload.surplus.map(x => {
-      let date = x.visit_time.substring(0, 1);
-      let time = x.visit_time.substring(-1);
-      switch (date){
-        case '1':
-          date = '星期一';
-          break;
-        case '2':
-          date = '星期二';
-          break;
-        case '3':
-          date = '星期三';
-          break;
-        case '4':
-          date = '星期四';
-          break;
-        case '5':
-          date = '星期五';
-          break;
-        case '6':
-          date = '星期六';
-          break;
-        case '7':
-          date = '星期天';
-          break;
-      }
-      time = time === '1' ? '上午' : '下午';
-      return { label: date + time, value: x.id };
+      let time = getVisitTime(x.visit_time);
+      return { label: time, value: x.id };
     });
     setTimeSurplus(newTimeSurplus);
   };
