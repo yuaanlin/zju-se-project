@@ -7,9 +7,10 @@ const { Content } = Layout;
 // import md5 from "js-md5";
 import { createLogin, createSignup } from '../../services/utils/log';
 import md5 from 'js-md5';
+import { useAuth } from '../context';
 
-export default function LoginPage() {
 
+const LoginPage = () =>{
 
   const [signup, setSignup] = useState(false);    //  true-sign up   false- sign in 
   
@@ -27,6 +28,17 @@ export default function LoginPage() {
 
   const router = useRouter();
   const [logInfo, setLogInfo] = useState('');
+
+
+  const authProps = useAuth();
+  
+  
+  
+  //  现在本组件是父组件, 需要把这个函数传递给子组件 <PageHeader>
+  // const [login_done, setLoginDone] = useState(false);
+  // const setLogout = () =>{
+  //   setLoginDone(false);
+  // }
 
   // localStorage
   
@@ -96,7 +108,9 @@ export default function LoginPage() {
 
   const handleButtonClick = () =>{
 
+
     if (signup) {   //  注册, 医生/患者
+      
       if(account != '' && password != '' && identity != '' && name != '' && personalID != '' && gender != '' && phone != '' && email != '' && medicalInsuranceID != ''){
         
         //  判断ID 能否转化为number
@@ -106,8 +120,8 @@ export default function LoginPage() {
             // console.log("OK")
             
             if ( response.errorCode == 200) { //  成功
-              // 此处需要引用父组件的函数
-              // setLoginDone(true);
+
+              authProps.setLogin();
               alert("注册成功！");
               localStorage.setItem("identity", identity);
               localStorage.setItem("token", response.payload.token);
@@ -189,8 +203,7 @@ export default function LoginPage() {
           createLogin(Number(account), md5(account+password), identity)
           .then((response)=>{
             if ( response.errorCode == 200) { //  成功
-              // 此处需要引用父组件的函数
-              // setLoginDone(true);
+              authProps.setLogin();
 
               alert("登录成功！");
               localStorage.setItem("identity", identity);
@@ -276,18 +289,18 @@ export default function LoginPage() {
             <Input 
               style={{marginLeft: 300, width: 348}}
               className='InputBox' 
-              placeholder="ID (Number Only)" 
+              placeholder="ID 仅支持数字 ID (Number Only)" 
               value={account}
               onChange={handleAccountInputChange}
             />
             <Input.Password 
               style={{marginLeft: 300, width: 348}}
               className='InputBox'
-              placeholder="Password"
+              placeholder="密码 Password"
               value={password}
               onChange={handlePasswordInputChange}
             />
-
+            {/* {useAuth().login_done ? 1 : 2} */}
             {
               signup
               ?
@@ -295,14 +308,14 @@ export default function LoginPage() {
                 <Input 
                   style={{marginLeft: 300, width: 348}}
                   className='InputBox' 
-                  placeholder="Name" 
+                  placeholder="姓名 Name" 
                   value={name}
                   onChange={handleNameInputChange}
                 />
                 <Input 
                   style={{marginLeft: 300, width: 348}}
                   className='InputBox' 
-                  placeholder="Personal ID" 
+                  placeholder="个人ID Personal ID" 
                   value={personalID}
                   onChange={handlePersonalIDInputChange}
                 />
@@ -312,28 +325,28 @@ export default function LoginPage() {
                     value={gender}
                     onChange={handleGenderChange}
                   >
-                    <Radio.Button style ={{width : 174, textAlign : "center"}} value="F">女 Female</Radio.Button>
                     <Radio.Button style ={{width : 174, textAlign : "center"}} value="M">男 Male</Radio.Button>
+                    <Radio.Button style ={{width : 174, textAlign : "center"}} value="F">女 Female</Radio.Button>
                   </Radio.Group>
                 </Space>
                 <Input 
                   style={{marginLeft: 300, width: 348}}
                   className='InputBox' 
-                  placeholder="Phone" 
+                  placeholder="手机 Phone" 
                   value={phone}
                   onChange={handlePhoneInputChange}
                 />
                 <Input 
                   style={{marginLeft: 300, width: 348}}
                   className='InputBox' 
-                  placeholder="Email" 
+                  placeholder="邮箱 Email" 
                   value={email}
                   onChange={handleEmailInputChange}
                 />
                 <Input 
                   style={{marginLeft: 300, width: 348}}
                   className='InputBox' 
-                  placeholder="Medical Insurance ID" 
+                  placeholder="医保序号 Medical Insurance ID" 
                   value={medicalInsuranceID}
                   onChange={handleMedicalInsuranceIDInputChange}
                 />
@@ -370,3 +383,5 @@ export default function LoginPage() {
       </>
     );
 }
+
+export default LoginPage;
