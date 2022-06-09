@@ -10,7 +10,7 @@ import md5 from 'js-md5';
 import { useAuth } from '../context';
 
 
-const LoginPage = () =>{
+export default function LoginPage() {
 
   const [signup, setSignup] = useState(false);    //  true-sign up   false- sign in 
   
@@ -97,7 +97,7 @@ const LoginPage = () =>{
     setGender(e.target.value);
   }
 
-  const judgeString = (str : String) => {
+  const judgeString = (str : string) => {
     for (let i =0; i<str.length;i++){
       if ( str.charAt(i) >= '0' && str.charAt(i) <= '9' ) continue;
       else return false;
@@ -385,5 +385,3 @@ const LoginPage = () =>{
       </>
     );
 }
-
-export default LoginPage;
