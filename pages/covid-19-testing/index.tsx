@@ -1,7 +1,7 @@
 import SiderMenu from '../component/SiderMenu';
 import { Layout, Input, Button, Radio, Space, notification, RadioChangeEvent } from 'antd';
 import { Popover } from 'antd';
-import AppointmentModal, { MODAL_STATUS } from '../component/AppointmentModal/index';
+import CovidModal,{ MODAL_STATUS } from'../component/CovidModal'
 const { Content } = Layout;
 import { useEffect, useState } from 'react';
 import{getLatestCovidResultResponse,postCovidAppoitment,
@@ -14,9 +14,9 @@ export default function Covid19TestingPage() {
     postCovidAppoitment().then(
       (response)=>{
         if ( response.errorCode == 200){
-          alert("核酸注册成功！");
+          alert("核酸预约成功！");
         }else{
-          alert("核酸注册失败！");
+          alert("核酸预约失败！");
         }
       }
     ).catch(()=>{
@@ -25,7 +25,19 @@ export default function Covid19TestingPage() {
   }
 
   const handleResultButtonClick = ()=>{
-
+    getLatestCovidResultResponse().then(
+      (response)=>{
+        if ( response.errorCode == 200){
+          alert("核酸查询成功！");
+          setModalVisible(true);
+        }else{
+          alert("404 无核酸记录！！");
+        }
+      }
+    ).catch(()=>{
+      alert("请检查网络！");
+    }
+    )
   }
 
   const onCreate = () => {
@@ -77,10 +89,9 @@ export default function Covid19TestingPage() {
           </Popover>
           </p>
         </div>
-        <AppointmentModal
-            modalStatus={1}
-            visible={false}
-            consultationId={undefined}
+        <CovidModal
+            modalStatus={MODAL_STATUS.PATIENT_COVID_RESULT_VIEW}
+            visible={modalVisible}
             onCreate={onCreate}
             onCancel={()=>{setModalVisible(false);}}
           />

@@ -26,7 +26,7 @@ import { request } from '../index';
 
 //1-4-1
 //患者查询自己最近一次核酸检测的状态
-type GetLatestCovidResultResponse = {
+export type GetLatestCovidResultResponse = {
     reportTime: string
     state: number
 }

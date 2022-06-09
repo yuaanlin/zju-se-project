@@ -1,11 +1,11 @@
+import { getVisitTime } from './addAppointmentForm';
 import {
-  getClinicDoctors,
-  getDoctorTimeSurplus,
+  ConsultationRecordType,
   getOneAppointment,
-  GetOneAppointmentResponse
 } from '../../../services/patient/appointment';
 import React, { useEffect, useState } from 'react';
-import { Input, Form, FormInstance } from 'antd';
+import { Input, Form, FormInstance, message, Select, Button, Descriptions } from 'antd';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 
 interface ViewAppointmentFormProps {
   consultationId: number;
@@ -16,59 +16,45 @@ const ViewAppointmentForm: React.FC<ViewAppointmentFormProps> = ({
   consultationId,
   form
 }) => {
-  // TODO: 根据id找到appointment值，显示即可
+  const [value, setValue] = useState<ConsultationRecordType>();
   const getAppointmentInfo = async (value: number) => {
     let res = await getOneAppointment(value);
-    if (res.errorCode === 401) {
+    if (res.errorCode != 200) {
       console.log(res.errorMsg);
+      message.error(res.errorMsg);
       return;
     }
-    let currentAppointent = res.payload;
+    let currentAppointent = res.payload.ConsultationRecord;
+    currentAppointent.visit_time = getVisitTime(currentAppointent.visit_time);
     form.setFieldsValue(currentAppointent);
+    setValue(currentAppointent);
   };
 
   useEffect(() => {
-    // getAppointmentInfo(consultationId);
+    getAppointmentInfo(consultationId);
   }, []);
-
+  if (!value)
+    return<></>;
   return (
-    <>
-      <Form.Item
-        name="clinic"
-        label="科室"
-      >
-        <Input
-          disabled
-        />
-      </Form.Item>
-
-      <Form.Item
-        name="docName"
-        label="医生"
-      >
-        <Input
-          disabled
-        />
-      </Form.Item>
-
-      <Form.Item
-        name="dateTime"
-        label="就诊时间"
-      >
-        <Input
-          disabled
-        />
-      </Form.Item>
-
-      <Form.Item
-        name="advice"
-        label="医嘱"
-      >
-        <Input
-          disabled
-        />
-      </Form.Item>
-    </>
+    <div>
+      <Descriptions >
+        <Descriptions.Item label="科室">{value.clinic_name}</Descriptions.Item>
+        <Descriptions.Item label="医生">{value.doctor_name}</Descriptions.Item>
+        <Descriptions.Item label="就诊时间">{value.visit_time}</Descriptions.Item>
+        <Descriptions.Item label="医嘱" span={3}>{value.advice}</Descriptions.Item>
+        <Descriptions.Item label="用药" >
+          {
+            value.medicines.map((x:any)=>{
+              return(
+                <div key={x.medication_id}>
+                  {x.medication_name} {x.medication_cnt} 份;
+                </div>
+              );
+            })
+          }
+        </Descriptions.Item>
+      </Descriptions>
+    </div>
   );
 };
 export default ViewAppointmentForm;

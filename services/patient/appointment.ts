@@ -1,4 +1,5 @@
 import { request } from '../index';
+import { MedicationItem } from '../doctor/consultation';
 import { utimes } from 'fs';
 
 type GetClinicsResponse = {
@@ -76,17 +77,25 @@ export function getAppointment() {
   });
 }
 
+export type ConsultationRecordType = {
+  id: number
+  patient_id: number
+  visit_id: number
+  create_time: string
+  patient_description: null
+  advice: null
+  state: number
+  doctor_id: number
+  visit_time: string
+  doctor_name: string
+  clinic_id: number
+  clinic_name: string
+  clinic_desc: string
+  medicines: MedicationItem[]
+}
+
 export type GetOneAppointmentResponse = {
-  clinic: string
-  docName: string
-  docGender: string
-  docTitle: string
-  docPhone: string
-  docEmail: string
-  dateTime: string
-  state: string
-  patientDesc: string
-  advice: string
+  ConsultationRecord: ConsultationRecordType
 }
 
 /** 获取某一预约 */

@@ -51,7 +51,6 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
     }
   };
 
-  //TODO: 更新医嘱
   const updateApp = async (advice: string, medications: Array<MedicationItem>) => {
     try {
       if (!consultationId) {
@@ -88,7 +87,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   return (
     <Modal
       visible={visible}
-      title="Create a new collection"
+      title="预约模块"
       okText="Create"
       cancelText="Cancel"
       onCancel={() => {
