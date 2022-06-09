@@ -9,6 +9,8 @@ import { createLogout } from '../services/utils/log';
 
 const { Header, Footer } = Layout;
 
+
+
 function MyApp({ Component, pageProps }: AppProps) {
 
   // window.localStorage;
@@ -17,35 +19,37 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   // let storage = window.localStorage;
   const router = useRouter();
+  
+  //  全局数据 login_done, 需要传递到子组件中
+  //  子组件中如果登录成功, 直接修改该值, 不需要通过localstorage进行修改
   const [login_done, setLoginDone] = useState(false);
+
+  //  下面的函数需要传递到子组件
+  const setLogin = () => {
+    setLoginDone(true);
+  }
 
   const handleButtonClick = () => {
 
-    //  存在问题？当登录之后，对应的identity会变化，但是该组件中的数据不会立刻变化
-    setLoginDone(  JSON.stringify( localStorage.getItem("identity") ) === null );    
-    // setAccount(e.target.value);
-    //  登录 注册   路由跳转
-    //  退出      
-    // localStorage.setItem("login_done", "false");
-    // console.log(localStorage);
+   
 
     if (!login_done) { //  登录/注册
       router.push("/login");
-      // console.log(storage);
     }
     else{       //  退出
       //  统一成一个数据包, 对应的格式都相同
       
       createLogout(JSON.stringify( localStorage.getItem("identity") ) )
       .then((response)=>{
-        // console.log("OK")
+
         if ( response.errorCode == 200) { //  成功
           // setLoginDone(false);
           alert("退出成功！");
           localStorage.removeItem("identity");
+          localStorage.removeItem("token");
           router.push("/");
         }
-        else {  //  失败, 密码重设
+        else {  //  失败
           alert("退出失败！");
           alert(response.errorMsg);
         }
@@ -77,7 +81,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           style={{textAlign : 'center', float : 'right', height : 38, borderRadius: 19, fontSize : 16, marginLeft : 700}}
         >
           { login_done ? "退出" : "登录/注册" }
-          {/* 登录/注册 */}
+
         </Button>
         {/* </Link> */}
         </Space>
