@@ -115,7 +115,8 @@ const LoginPage = () =>{
         
         //  判断ID 能否转化为number
         if( judgeString(account) ){   //  可以封装数据包
-          createSignup(Number(account), md5(account+password), identity,name,personalID,gender,phone,email,medicalInsuranceID)
+          // createSignup(Number(account), md5(account+password), identity,name,personalID,gender,phone,email,medicalInsuranceID)
+          createSignup(Number(account), account+password, identity,name,personalID,gender,phone,email,medicalInsuranceID)
           .then((response)=>{
             // console.log("OK")
             
@@ -200,7 +201,8 @@ const LoginPage = () =>{
         if( judgeString(account) ){   //  可以封装数据包
 
           //  统一成一个数据包, 对应的格式都相同
-          createLogin(Number(account), md5(account+password), identity)
+          // createLogin(Number(account), md5(account+password), identity)
+          createLogin(Number(account), account+password, identity)
           .then((response)=>{
             if ( response.errorCode == 200) { //  成功
               authProps.setLogin();
