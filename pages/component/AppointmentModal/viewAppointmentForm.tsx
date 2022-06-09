@@ -44,13 +44,13 @@ const ViewAppointmentForm: React.FC<ViewAppointmentFormProps> = ({
         <Descriptions.Item label="医嘱" span={3}>{value.advice}</Descriptions.Item>
         <Descriptions.Item label="用药" >
           {
-            value.medicines.map((x:any)=>{
+            value.medicines ? value.medicines.map((x:any)=>{
               return(
                 <div key={x.medication_id}>
                   {x.medication_name} {x.medication_cnt} 份;
                 </div>
               );
-            })
+            }): <div> 没有找到药物 </div>
           }
         </Descriptions.Item>
       </Descriptions>
