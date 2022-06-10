@@ -3,7 +3,7 @@ import 'antd/dist/antd.css';
 import { Layout } from 'antd';
 import type { AppProps } from 'next/app';
 import React from 'react';
-import AuthContextProvider from './context';
+import  { AuthContext, useAuth } from './context';
 import PageHeader from './PageHeader';
 
 const { Footer } = Layout;
@@ -12,9 +12,10 @@ const { Footer } = Layout;
 
 function MyApp({ Component, pageProps }: AppProps) {
 
+  const LoginValue = useAuth();
   
   return (
-    <AuthContextProvider>
+    <AuthContext.Provider value = {LoginValue} >
       <Layout>
         <PageHeader/>
         <Layout
@@ -30,7 +31,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           ZJU SE ©2022 Created by xxx
         </Footer>
       </Layout>
-    </AuthContextProvider>
+    </AuthContext.Provider>
   );
 }
 

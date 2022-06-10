@@ -12,26 +12,7 @@ const { Header } = Layout;
 
 const PageHeader  = () =>{
   const router = useRouter();
-  //  全局数据 login_done, 需要传递到子组件中
-  //  子组件中如果登录成功, 直接修改该值, 不需要通过localstorage进行修改
-  
 
-  //  下面的函数需要传递到子组件
-
-  // window.localStorage;
-
-  // getCookieParser();
-
-  // let storage = window.localStorage;
-  
-  //  全局数据 login_done, 需要传递到子组件中
-  //  子组件中如果登录成功, 直接修改该值, 不需要通过localstorage进行修改
-  // const [login_done, setLoginDone] = useState(false);
-
-  // //  下面的函数需要传递到子组件
-  // const setLogin = () => {
-  //   setLoginDone(true);
-  // }
 
   const authProps = useAuth();
 
