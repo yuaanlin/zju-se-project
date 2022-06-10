@@ -17,7 +17,8 @@ const PageHeader  = () =>{
   const authProps = useAuth();
 
   const handleButtonClick = () => {
-    if ( localStorage.getItem("token") == null ) { //  登录/注册
+    // if ( localStorage.getItem("token") == null ) { //  登录/注册
+    if ( !authProps.login_done) { //  登录/注册
       router.push("/login");
     }
     else{       //  退出
@@ -31,8 +32,8 @@ const PageHeader  = () =>{
           authProps.setLogout();
 
           alert("退出成功！");
-          localStorage.removeItem("identity");
-          localStorage.removeItem("token");
+          // localStorage.removeItem("identity");
+          // localStorage.removeItem("token");
           router.push("/");
         }
         else {  //  失败,
