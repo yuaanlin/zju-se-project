@@ -124,8 +124,8 @@ export default function LoginPage() {
 
               authProps.setLogin();
               alert("注册成功！");
-              // localStorage.setItem("identity", identity);
-              // localStorage.setItem("token", response.payload.token);
+              localStorage.setItem("identity", identity);
+              localStorage.setItem("token", response.payload.token);
               setIdentity('');
               setAccount('');
               setPassword('');
@@ -208,8 +208,8 @@ export default function LoginPage() {
               authProps.setLogin();
 
               alert("登录成功！");
-              // localStorage.setItem("identity", identity);
-              // localStorage.setItem("token", response.payload.token);
+              localStorage.setItem("identity", identity);
+              localStorage.setItem("token", response.payload.token);
               setIdentity('');
               setAccount('');
               setPassword('');

@@ -32,8 +32,8 @@ const PageHeader  = () =>{
           authProps.setLogout();
 
           alert("退出成功！");
-          // localStorage.removeItem("identity");
-          // localStorage.removeItem("token");
+          localStorage.removeItem("identity");
+          localStorage.removeItem("token");
           router.push("/");
         }
         else {  //  失败,
