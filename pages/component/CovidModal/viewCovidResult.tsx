@@ -35,7 +35,7 @@ const ViewCovidResult: React.FC<ViewCovidResultFormProps>=(
         <div>
             <Descriptions>
             <Descriptions.Item label="科室">{value?.reportTime}</Descriptions.Item>
-            <Descriptions.Item label="是否阳性">{value?.state}</Descriptions.Item>
+            <Descriptions.Item label="是否阳性">{value?.state==1?'阳性':'阴性'}</Descriptions.Item>
             </Descriptions>
         </div>
     );
