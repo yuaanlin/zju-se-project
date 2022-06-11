@@ -2,16 +2,14 @@ import SiderMenu from '../component/SiderMenu';
 import { Layout, Input, Button, Radio, Space, RadioChangeEvent } from 'antd';
 import React, { ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/router';
-const { Content } = Layout;
-
-// import md5 from "js-md5";
 import { createLogin, createSignup } from '../../services/utils/log';
 import md5 from 'js-md5';
 import { useAuth } from '../context';
 
 
-export default function LoginPage() {
+const { Content } = Layout;
 
+export default function LoginPage() {
   const [signup, setSignup] = useState(false);    //  true-sign up   false- sign in 
   
   const [identity, setIdentity] = useState('');   //  doctor patient manager
@@ -43,7 +41,7 @@ export default function LoginPage() {
   // localStorage
   
   //  whether to display the info of failing in sign in or sign up
-  
+
   // const [logInfoShow, setLogInfoShow] = useState('false');
 
   const handleSwitchClick = () => {
@@ -377,11 +375,10 @@ export default function LoginPage() {
             >
               {signup ? "已有账户，点击登录" : "没有账户，点击注册"}
             </a>
+
           </Space>
           
-          
         </Content>
-        
       </>
     );
 }
