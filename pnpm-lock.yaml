@@ -7,6 +7,7 @@ specifiers:
   '@types/react-dom': 18.0.0
   '@typescript-eslint/eslint-plugin': ^5.18.0
   '@typescript-eslint/parser': ^5.18.0
+  ant-design: ^1.0.0
   antd: ^4.20.3
   eslint: 8.12.0
   eslint-config-next: 12.1.4
@@ -21,6 +22,7 @@ specifiers:
 dependencies:
   '@typescript-eslint/eslint-plugin': 5.23.0_7wpazmhd56megwea3kt7sig2ly
   '@typescript-eslint/parser': 5.23.0_thk3xo4exzjr5rl6cnexo7v6re
+  ant-design: 1.0.0
   antd: 4.20.3_zpnidt7m3osuk7shl3s4oenomq
   eslint-plugin-import: 2.26.0_24hvj2a5sfuyuxmwnz5iuylrti
   eslint-plugin-react: 7.29.4_eslint@8.12.0
@@ -529,6 +531,10 @@ packages:
     dependencies:
       color-convert: 2.0.1
     dev: true
+
+  /ant-design/1.0.0:
+    resolution: {integrity: sha512-EiN9oXroImi01yz1xwpDzExb1U5ddi4MYiCTaTLVl8SA3QHXYClJn0BikAYS2IMPzmpmAYhwOgGA2HE/sL/c9g==}
+    dev: false
 
   /antd/4.20.3_zpnidt7m3osuk7shl3s4oenomq:
     resolution: {integrity: sha512-liZB/OguxPPNnssiR8UH5gjAV3LetsnA8K0G+VBVJkCZsU5QmCDL05d059Nu6iRD7FVg0drSONZQwvWD4pO4nw==}
