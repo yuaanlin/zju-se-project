@@ -3,7 +3,6 @@ import { Layout, Input, Button, Radio, Space, RadioChangeEvent } from 'antd';
 import React, { ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { createLogin, createSignup } from '../../services/utils/log';
-import md5 from 'js-md5';
 import { useAuth } from '../context';
 
 
@@ -114,7 +113,7 @@ export default function LoginPage() {
         //  判断ID 能否转化为number
         if( judgeString(account) ){   //  可以封装数据包
           // createSignup(Number(account), md5(account+password), identity,name,personalID,gender,phone,email,medicalInsuranceID)
-          createSignup(Number(account), account+password, identity,name,personalID,gender,phone,email,medicalInsuranceID)
+          createSignup(Number(account), password, identity,name,personalID,gender,phone,email,medicalInsuranceID)
           .then((response)=>{
             // console.log("OK")
             
@@ -200,7 +199,7 @@ export default function LoginPage() {
 
           //  统一成一个数据包, 对应的格式都相同
           // createLogin(Number(account), md5(account+password), identity)
-          createLogin(Number(account), account+password, identity)
+          createLogin(Number(account), password, identity)
           .then((response)=>{
             if ( response.errorCode == 200) { //  成功
               authProps.setLogin();
