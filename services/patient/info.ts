@@ -12,9 +12,8 @@ type Info =
 
 const getInfo = async ()=>{
     const res = await request<{userInfo:Info}>({
-        method: 'POST'
+        method: 'GET'
     ,   url: "/api/patient/info/getInfo"
-    ,   data: {}
     })
     if(200==res.errorCode)
         return res.payload.userInfo
