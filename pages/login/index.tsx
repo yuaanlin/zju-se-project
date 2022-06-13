@@ -9,10 +9,13 @@ import { useAuth } from '../context';
 
 const { Content } = Layout;
 
+type Identity = 'doctor' | 'patient' | 'admin' | string // string -> default
+export type { Identity }
+
 export default function LoginPage() {
   const [signup, setSignup] = useState(false);    //  true-sign up   false- sign in 
   
-  const [identity, setIdentity] = useState('');   //  doctor patient manager
+  const [identity, setIdentity] = useState<Identity>('');   //  doctor patient admin
 
   const [account, setAccount] = useState('');      //  id(需要先转化为string)
   const [password, setPassword] = useState('');   //  password
