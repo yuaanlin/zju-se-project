@@ -14,7 +14,6 @@ specifiers:
   eslint-config-next: 12.1.4
   eslint-plugin-import: ^2.26.0
   eslint-plugin-react: ^7.29.4
-  js-md5: ^0.7.3
   next: 12.1.4
   react: 18.0.0
   react-dom: 18.0.0
@@ -28,7 +27,6 @@ dependencies:
   antd: 4.20.3_zpnidt7m3osuk7shl3s4oenomq
   eslint-plugin-import: 2.26.0_24hvj2a5sfuyuxmwnz5iuylrti
   eslint-plugin-react: 7.29.4_eslint@8.12.0
-  js-md5: 0.7.3
   next: 12.1.4_zpnidt7m3osuk7shl3s4oenomq
   react: 18.0.0
   react-dom: 18.0.0_react@18.0.0
@@ -1529,10 +1527,6 @@ packages:
   /isexe/2.0.0:
     resolution: {integrity: sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=}
     dev: true
-
-  /js-md5/0.7.3:
-    resolution: {integrity: sha512-ZC41vPSTLKGwIRjqDh8DfXoCrdQIyBgspJVPXHBGu4nZlAEvG3nf+jO9avM9RmLiGakg7vz974ms99nEV0tmTQ==}
-    dev: false
 
   /js-tokens/4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
