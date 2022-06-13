@@ -1,14 +1,9 @@
 import AddAppointmentForm from './addAppointmentForm';
 import ViewAppointmentForm from './viewAppointmentForm';
 import AddAdviceAppointmentForm from './addAdviceAppointmentForm';
-import {
-  cancelAppointment,
-  createAppointment,
-  getClinicDoctors,
-  getDoctorTimeSurplus
-} from '../../../services/patient/appointment';
-import { finishConsultation } from '../../../services/doctor/consultation';
-import React, { useEffect, useState } from 'react';
+import { createAppointment } from '../../../services/patient/appointment';
+import { finishConsultation, MedicationItem } from '../../../services/doctor/consultation';
+import React from 'react';
 import { Modal, Form, message } from 'antd';
 
 export enum MODAL_STATUS {
@@ -49,17 +44,26 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
         return;
       }
       message.success('预约创建成功;)');
+      return res;
     } catch (e) {
       console.log(e);
       alert(e);
     }
   };
 
-  //TODO: 更新医嘱
-  const updateApp = async (appointmentId : number) => {
+  const updateApp = async (advice: string, medications: Array<MedicationItem>) => {
     try {
-      let res = await finishConsultation(appointmentId, { advice: form.getFieldValue('advice'), medications: form.getFieldValue('medications') });
-      console.log('update success');
+      if (!consultationId) {
+        message.error('获取预约出错');
+        return;
+      }
+      let res = await finishConsultation(consultationId, { advice: advice, medications: medications });
+      if (res.errorCode != 200) {
+        message.error(res.errorMsg);
+        return;
+      }
+      message.success('医嘱添加成功;)');
+      return res;
     } catch (e) {
       console.log(e);
       alert(e);
@@ -67,14 +71,23 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   };
 
   const setModeFunction = (values: any) => {
+    let res;
     if(modalStatus === MODAL_STATUS.USER_ADD_APPOINTMENT) {
-      createApp(values.time);
+      res = createApp(values.time);
+    } else if (modalStatus === MODAL_STATUS.DOCTOR_EDIT_ADD_APPOINTMENT) {
+      res = updateApp(values.advice, values.medications);
     }
+    return res;
+  };
+  const onOK = async (values: any) => {
+    form.resetFields();
+    let res = await setModeFunction(values);
+    onCreate(values);
   };
   return (
     <Modal
       visible={visible}
-      title="Create a new collection"
+      title="预约模块"
       okText="Create"
       cancelText="Cancel"
       onCancel={() => {
@@ -84,11 +97,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
       onOk={() => {
         form
           .validateFields()
-          .then(values => {
-            form.resetFields();
-            setModeFunction(values);
-            onCreate(values);
-          })
+          .then(onOK)
           .catch(info => {
             console.log('Validate Failed:', info);
           });
@@ -99,7 +108,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
         layout="vertical"
         name="form_in_modal"
         onValuesChange={(v, all)=>{
-          console.log(form.getFieldsValue());
+          console.log(all);
         }}
         style={{ paddingLeft: 50, paddingRight: 50 }}
       >

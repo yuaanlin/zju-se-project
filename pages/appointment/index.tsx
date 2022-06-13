@@ -1,9 +1,8 @@
 import SiderMenu from '../component/SiderMenu';
 import AppointmentModal, { MODAL_STATUS } from '../component/AppointmentModal/index';
 import { cancelAppointment, getAppointment } from '../../services/patient/appointment';
-import { Button, Form, Layout, message, Space, Table, Tag } from 'antd';
+import { Button, Layout, message, Space, Table, Tag } from 'antd';
 import { useEffect, useState } from 'react';
-// @ts-ignore
 import { PlusOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
@@ -49,11 +48,11 @@ export default function AppointmentPage() {
   const [consultationId, setConsultationId] = useState<number|undefined>(undefined);
   const [modalStatus, setModalStatus] = useState(MODAL_STATUS.USER_ADD_APPOINTMENT);
   const [appTable, setAppTable] = useState<AppointmentType[]>([]);
+
   const onCreate = () => {
     getAppointmentList();
     setModalVisible(false);
   };
-
   const cancelApp = async (appointmentId : number) => {
     try {
       let res = await cancelAppointment(appointmentId);
@@ -116,7 +115,6 @@ export default function AppointmentPage() {
       title: '状态',
       key: 'state',
       dataIndex: 'state',
-      //TODO: tag需要设置为interface，设置预约的状态
       render: (tag: any) => (
         <Tag color={findColor(tag)} key={tag}>
           {tag === 2 ? '已预约' : tag === 4 ? '问诊中' : '已结束'}
@@ -126,7 +124,6 @@ export default function AppointmentPage() {
     {
       title: '操作',
       key: 'action',
-      //TODO:record为表的row数据类型，创建接口
       render: (text: any, record: any) => (
         <Space size="middle">
           <Button
@@ -188,13 +185,21 @@ export default function AppointmentPage() {
             columns={columns}
             dataSource={appTable}
           />
-          <AppointmentModal
-            modalStatus={modalStatus}
-            visible={modalVisible}
-            consultationId={consultationId}
-            onCreate={onCreate}
-            onCancel={()=>{setModalVisible(false);}}
-          />
+          {
+            modalVisible ?
+              <AppointmentModal
+                visible={true}
+                modalStatus={modalStatus}
+                consultationId={consultationId}
+                onCreate={onCreate}
+                onCancel={
+                  ()=>{
+                    getAppointmentList();
+                    setModalVisible(false);
+                  }
+                }
+              /> : null
+          }
         </div>
         <Button
           style={{
