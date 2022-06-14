@@ -18,16 +18,15 @@ type Info =
 }
 
 const getInfo = async ()=>{
-  const res = await request<{userInfo:Info}>({
-    method: 'POST',
-    url: '/api/doctor/info/getInfo',
-    data: {}
-  });
-  if(200==res.errorCode)
-    return res.payload.userInfo;
-  else
-    throw res;
-};
+    const res = await request<{userInfo:Info}>({
+        method: 'GET',
+        url: "/api/doctor/info/getInfo"
+    })
+    if(200==res.errorCode)
+        return res.payload.userInfo
+    else
+        throw res
+}
 
 const updateInfo = async (info:Info)=> await request<{}>({
   method: 'POST',
