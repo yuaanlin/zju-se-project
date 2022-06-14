@@ -34,7 +34,6 @@ export default function DoctorPage() {
 
   async function onDeleteClinic(doctor: DoctorType) {
     const res = await deleteDoctor(doctor.id);
-    console.log(res);
     if (res.errorCode !== 200) {
       message.error(res.errorMsg);
       return;
@@ -92,7 +91,6 @@ export default function DoctorPage() {
 
   const getDoctorList = async () => {
     let res = await getDoctors();
-    console.log(res);
     if (res.errorCode != 200) {
       message.error(res.errorMsg);
       return;
