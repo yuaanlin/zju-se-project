@@ -14,9 +14,9 @@
     "@typescript-eslint/parser": "^5.18.0",
     "ant-design": "^1.0.0",
     "antd": "^4.20.3",
+    "antd-img-crop": "^4.2.3",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-react": "^7.29.4",
-    "js-md5": "^0.7.3",
     "next": "12.1.4",
     "react": "18.0.0",
     "react-dom": "18.0.0"

@@ -13,11 +13,11 @@ type ResponseType<ResponsePayloadType> = {
 }
 
 export async function request<ResponsePayloadType>(opt: RequestOption) {
-  const headers = new Headers();
-  headers.append('Content-Type', 'application/json');
+  const headers: { [key: string]: string } = {};
+  headers['Content-Type'] = 'application/json';
   const tokenInLocalStorage = localStorage.getItem('token');
   if (tokenInLocalStorage)
-    headers.append('Authorization', 'Bearer ' + tokenInLocalStorage);
+    headers['Authorization'] = 'Bearer ' + tokenInLocalStorage;
   const res = await fetch(API_URL + opt.url, {
     headers,
     method: opt.method,

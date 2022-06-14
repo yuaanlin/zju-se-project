@@ -9,6 +9,10 @@ import{getLatestCovidResultResponse,postCovidAppoitment,
 
 
 export default function Covid19TestingPage() {
+  const [identity, setIdentity] = useState<string|null>('');
+  const [modalStatus, setModalStatus] = useState(
+    MODAL_STATUS.PATIENT_COVID_RESULT_VIEW
+  );
   const [modalVisible, setModalVisible] = useState(false);
   const handleButtonClick = ()=>{
     postCovidAppoitment().then(
@@ -29,9 +33,28 @@ export default function Covid19TestingPage() {
       (response)=>{
         if ( response.errorCode == 200){
           alert("核酸查询成功！");
+          setModalStatus(MODAL_STATUS.PATIENT_COVID_RESULT_VIEW);
           setModalVisible(true);
         }else{
           alert("404 无核酸记录！！");
+        }
+      }
+    ).catch(()=>{
+      alert("请检查网络！");
+    }
+    )
+  }
+
+  const handleAddButtonClick = ()=>{
+    getLatestCovidResultResponse().then(
+      (response)=>{
+        if ( response.errorCode == 200){
+          //alert("核酸检测上传成功！");
+          setModalStatus(MODAL_STATUS.DOCTOR_COVID_ADD_RESULT);
+          setModalVisible(true);
+
+        }else{
+          alert("401非法ID!!");
         }
       }
     ).catch(()=>{
@@ -44,9 +67,13 @@ export default function Covid19TestingPage() {
     setModalVisible(false);
   };
 
+  
+
   const content1 = (
     <div>
-      <Button
+      {
+        identity === 'patient' ?
+        <Button
                   style={{width: "150px", height: "34px", fontSize: 16, marginLeft:10}}
                   // style={{width: "220px", height: "30px", lineHeight: "30px", color: 'white', background: "#3194d0", borderra-radius: "15px", margin: "10px auto", text-align: "center"}}
                   type="primary"
@@ -55,20 +82,56 @@ export default function Covid19TestingPage() {
       >
         一键预约
       </Button>
-      <p>        </p>
-      <p>
-      <Button
+        :
+        <Button
                   style={{width: "150px", height: "34px", fontSize: 16, marginLeft:10}}
                   // style={{width: "220px", height: "30px", lineHeight: "30px", color: 'white', background: "#3194d0", borderra-radius: "15px", margin: "10px auto", text-align: "center"}}
                   type="primary"
                   // className='ButtonBox'
-                  onClick={handleResultButtonClick}
+                  onClick={()=>{}}
       >
-        查看结果
+        当前用户不可预约
       </Button>
+      }
+
+      <p></p>
+      <p>
+      {
+        identity === 'patient' ?
+        <Button
+        style={{width: "150px", height: "34px", fontSize: 16, marginLeft:10}}
+        // style={{width: "220px", height: "30px", lineHeight: "30px", color: 'white', background: "#3194d0", borderra-radius: "15px", margin: "10px auto", text-align: "center"}}
+        type="primary"
+        // className='ButtonBox'
+        onClick={handleResultButtonClick}
+        >
+          查看结果
+        </Button>
+        :null
+      }
+      {
+        identity === 'doctor' ?
+        <Button
+        style={{width: "150px", height: "34px", fontSize: 16, marginLeft:10}}
+        // style={{width: "220px", height: "30px", lineHeight: "30px", color: 'white', background: "#3194d0", borderra-radius: "15px", margin: "10px auto", text-align: "center"}}
+        type="primary"
+        // className='ButtonBox'
+        onClick={handleAddButtonClick}
+        >
+          查看结果
+        </Button>
+        :null
+      }
+      
       </p>
     </div>
   );
+
+  useEffect(() => {
+    let i = localStorage.getItem('identity');
+    setIdentity(i);
+  }, []);
+
   return (
     <>
       <SiderMenu />
@@ -90,7 +153,7 @@ export default function Covid19TestingPage() {
           </p>
         </div>
         <CovidModal
-            modalStatus={MODAL_STATUS.PATIENT_COVID_RESULT_VIEW}
+            modalStatus={modalStatus}
             visible={modalVisible}
             onCreate={onCreate}
             onCancel={()=>{setModalVisible(false);}}

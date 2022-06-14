@@ -32,6 +32,7 @@ export default function ClinicPage() {
   const [modalVisible, setModalVisible] = useState(false);
   const [editingClinic, setEditingClinic] = useState<ClinicType>();
   const [appTable, setAppTable] = useState<ClinicType[]>([]);
+  const [identity, setIdentity] = useState<string|null>('');
 
   async function onCreateClinic(v: any) {
     const res = await createClinic(v.name, v.description);
@@ -86,12 +87,17 @@ export default function ClinicPage() {
       key: 'action',
       render: (_: string, record: ClinicType) => (
         <Space size="middle">
-          <a onClick={() => setEditingClinic(record)}>
-            修改信息
-          </a>
-          <a onClick={() => onDeleteClinic(record)}>
-            删除
-          </a>
+          {
+            identity === 'admin' ?
+              <>
+                <a onClick={() => setEditingClinic(record)}>
+                  修改信息
+                </a>
+                <a onClick={() => onDeleteClinic(record)}>
+                  删除
+                </a>
+              </>: <>没有操作权限</>
+          }
         </Space>
       ),
     },
@@ -113,6 +119,8 @@ export default function ClinicPage() {
   };
 
   useEffect(() => {
+    let i = localStorage.getItem('identity');
+    setIdentity(i);
     getClinicList();
   }, []);
 
@@ -157,18 +165,21 @@ export default function ClinicPage() {
             onSubmit={onUpdateClinic}
             onCancel={() => setEditingClinic(undefined)} />
         </div>
-        <Button
-          style={{
-            position: 'absolute',
-            right: 100,
-            bottom: 150
-          }}
-          onClick={() => {
-            setModalVisible(true);
-          }}
-          type="primary"
-          shape="circle"
-          icon={<PlusOutlined />} />
+        {
+          identity === 'admin' ?
+            <Button
+              style={{
+                position: 'absolute',
+                right: 100,
+                bottom: 150
+              }}
+              onClick={() => {
+                setModalVisible(true);
+              }}
+              type="primary"
+              shape="circle"
+              icon={<PlusOutlined />} /> : null
+        }
       </Content>
     </>
   );

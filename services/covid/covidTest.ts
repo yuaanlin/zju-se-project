@@ -51,7 +51,7 @@ export async function postCovidAppoitment() {
 //
 export async function postCovidResult(covidTestId: number,ifPositive:number) {
     return request<{}>({
-        url:'/api/docter/nat/reportNAT',
+        url:'/api/doctor/nat/reportNAT',
         method:'POST',
         data:{
             nat_id :covidTestId,

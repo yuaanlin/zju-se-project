@@ -22,7 +22,12 @@ const ViewCovidResult: React.FC<ViewCovidResultFormProps>=(
             return;
         }
         let currentResult = res.payload;
-        currentResult.reportTime = getVisitTime(currentResult.reportTime);
+        if(currentResult.reportTime == undefined){
+            currentResult.reportTime = '暂未出结果';
+        }else{
+            currentResult.reportTime = getVisitTime(currentResult.reportTime);
+        }
+        
         form.setFieldsValue(currentResult);
         setValue(currentResult);
     };
@@ -34,7 +39,30 @@ const ViewCovidResult: React.FC<ViewCovidResultFormProps>=(
     return(
         <div>
             <Descriptions>
-            <Descriptions.Item label="科室">{value?.reportTime}</Descriptions.Item>
+            {
+                value?.reportTime=='暂未出结果'?
+                    <Descriptions.Item label="报告状态">{'未出具'}</Descriptions.Item>
+                :
+                null
+            }
+            {
+                value?.reportTime=='暂未出结果'?
+                null 
+                :
+                <Descriptions.Item label="报告状态">{'已出具'}</Descriptions.Item>
+            }   
+            {
+                value?.reportTime=='暂未出结果'?
+                    <Descriptions.Item label="报告时间">{'NULL'}</Descriptions.Item>
+                :
+                null
+            }
+            {
+                value?.reportTime=='暂未出结果'?
+                null 
+                :
+                <Descriptions.Item label="报告时间">{value?.reportTime}</Descriptions.Item>
+            }
             <Descriptions.Item label="是否阳性">{value?.state==1?'阳性':'阴性'}</Descriptions.Item>
             </Descriptions>
         </div>
