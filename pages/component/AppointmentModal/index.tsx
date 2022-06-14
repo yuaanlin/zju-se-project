@@ -107,9 +107,6 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
         form={form}
         layout="vertical"
         name="form_in_modal"
-        onValuesChange={(v, all)=>{
-          console.log(all);
-        }}
         style={{ paddingLeft: 50, paddingRight: 50 }}
       >
         {

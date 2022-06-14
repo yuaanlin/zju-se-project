@@ -34,7 +34,6 @@ export default function DoctorPage() {
 
   async function onDeleteClinic(doctor: DoctorType) {
     const res = await deleteDoctor(doctor.id);
-    console.log(res);
     if (res.errorCode !== 200) {
       message.error(res.errorMsg);
       return;
@@ -66,8 +65,8 @@ export default function DoctorPage() {
     },
     {
       title: '描述',
-      dataIndex: 'desc',
-      key: 'desc',
+      dataIndex: 'description',
+      key: 'description',
     },
     {
       title: '操作',
@@ -178,7 +177,7 @@ const UpdateDoctorModal: React.FC<UpdateDoctorModalProps> = (props) => {
     if (!doctor) return;
     form.setFieldsValue({
       name: doctor.name,
-      description: doctor.desc
+      description: doctor.description
     });
   }, [doctor]);
 
@@ -227,7 +226,7 @@ const UpdateDoctorModal: React.FC<UpdateDoctorModalProps> = (props) => {
         </Form.Item>
 
         <Form.Item
-          name="desc"
+          name="description"
           label="医生描述"
           rules={[
             {
