@@ -9,7 +9,7 @@ export type DoctorType = {
   title: string,
   phone: string,
   email: string,
-  desc: string
+  description: string
 }
 /** 管理员新增医生 */
 export function createDoctor(param: DoctorType) {
