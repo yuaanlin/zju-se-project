@@ -1,10 +1,10 @@
 import { request } from '../index';
 
 type Info = 
-{   adminName             : string
-,   phoneNumber           : string
-,   emailAddress          : string
-,   gender                : string
+{   name    : string
+,   phone   : string
+,   email   : string
+,   gender  : string
 }
 
 const getInfo = async ()=>{

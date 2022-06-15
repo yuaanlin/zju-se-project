@@ -139,9 +139,9 @@ const AdminInfo = ({info}:{info:admin.Info})=>{
     initialValues={info}
     onFinish={onFinish}
     >
-    <Form.Item name="adminName" label="名字"><Input /></Form.Item>
-    <Form.Item name="phoneNumber" label="电话"><Input /></Form.Item>
-    <Form.Item name="emailAddress" label="邮件"><Input /></Form.Item>
+    <Form.Item name="name" label="名字"><Input /></Form.Item>
+    <Form.Item name="phone" label="电话"><Input /></Form.Item>
+    <Form.Item name="email" label="邮件"><Input /></Form.Item>
     <Form.Item name="gender" label="性别"><Gender /></Form.Item>
     <Button type="primary" htmlType="submit"> 修改 </Button>
     </Form>
@@ -213,10 +213,10 @@ const Info = ({identity}:{identity:Identity})=>{
                 console.log(`doctor info get ${error}`)
                 console.log(`doctor info set default`)
                 const info : admin.Info = 
-                {   adminName             : "Hmmm"
-                ,   phoneNumber           : "123456788901"
-                ,   emailAddress          : "admin@Q.com"
-                ,   gender                : "U"
+                {   name   : "Hmmm"
+                ,   phone  : "123456788901"
+                ,   email  : "admin@Q.com"
+                ,   gender : "U"
                 }
                 return info
             })
