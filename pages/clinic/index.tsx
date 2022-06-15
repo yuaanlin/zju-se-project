@@ -48,11 +48,12 @@ export default function ClinicPage() {
     if (!editingClinic) return;
     const res = await updateClinic(
       editingClinic.clinic_id, v.name, v.description);
-    await getClinicList();
     if (res.errorCode !== 200) {
       message.error(res.errorMsg);
       return;
     }
+    message.success('科室更改成功;)');
+    await getClinicList();
     setModalVisible(false);
   }
 
