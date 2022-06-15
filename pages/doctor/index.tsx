@@ -76,9 +76,9 @@ export default function DoctorPage() {
           {
             identity === 'admin' ?
               <>
-                {/*<a onClick={() => setEditingClinic(record)}>*/}
-                {/*  修改信息*/}
-                {/*</a>*/}
+                <a onClick={() => setEditingDoctor(record)}>
+                  修改信息
+                </a>
                 <a onClick={() => onDeleteClinic(record)}>
                   删除
                 </a>
@@ -138,21 +138,6 @@ export default function DoctorPage() {
             onSubmit={onUpdateDoctor}
             onCancel={() => setEditingDoctor(undefined)} />
         </div>
-        {
-          identity === 'admin' ?
-            <Button
-              style={{
-                position: 'absolute',
-                right: 100,
-                bottom: 150
-              }}
-              onClick={() => {
-                setModalVisible(true);
-              }}
-              type="primary"
-              shape="circle"
-              icon={<PlusOutlined />} /> : null
-        }
       </Content>
     </>
   );
@@ -232,6 +217,32 @@ const UpdateDoctorModal: React.FC<UpdateDoctorModalProps> = (props) => {
             {
               required: true,
               message: '请填写医生描述'
+            }
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="phone"
+          label="医生手机"
+          rules={[
+            {
+              required: true,
+              message: '请填写医生手机'
+            }
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="email"
+          label="医生邮件"
+          rules={[
+            {
+              required: true,
+              message: '请填写医生邮件'
             }
           ]}
         >
