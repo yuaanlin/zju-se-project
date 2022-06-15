@@ -3,11 +3,11 @@ import { request } from '../index';
 type Info = 
 {   id                    : number
 ,   name                  : string
-,   personaID             : number
+,   personalID             : number
 ,   gender                : string
 ,   phone                 : string
 ,   email                 : string
-,   medical_insuranceID   : string
+,   medicalInsuranceID   : string
 }
 
 const getInfo = async ()=>{
