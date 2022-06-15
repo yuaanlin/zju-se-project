@@ -50,7 +50,22 @@ export async function getFinishedConsultations() {
 }
 
 type GetAllConsultationResponse = {
-  allConsultations: number[]
+  consultationInfo: {
+    id: number,
+    patient_id: number,
+    patient_description:string,
+    advice: string,
+    state: number,
+    doctor_id: number,
+    doctor_name: string,
+    clinic_id: string,
+    clinic_name: string,
+    clinic_desc: string,
+    create_time: string,
+    visit_id: number,
+    visit_time: string,
+    // date: string
+  }[]
 }
 
 /** 获取与某医生有关的全部问诊 */
