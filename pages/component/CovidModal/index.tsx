@@ -55,8 +55,8 @@ const CovidModal: React.FC<CovidtModalProps>=({
         onCancel();
       }}
       onOk={() => {
-        alert('onOK');
-        //if(modalStatus==MODAL_STATUS.DOCTOR_COVID_ADD_RESULT){
+        //alert('onOK');
+        if(modalStatus==MODAL_STATUS.DOCTOR_COVID_ADD_RESULT){
           form.validateFields().then(
             async(values)=>{
               alert(values.natID+' '+values.state);
@@ -68,10 +68,16 @@ const CovidModal: React.FC<CovidtModalProps>=({
                 alert('post sucess!');
               }
             }
+            
           ).catch((info) => {
             console.log('Covid Result Post Failed:', info);
           });
-        //}
+          form.resetFields();
+          onCancel();
+        }else{
+          form.resetFields();
+          onCancel();
+        }
       }}
     >
       <Form
@@ -84,9 +90,10 @@ const CovidModal: React.FC<CovidtModalProps>=({
         style={{ paddingLeft: 50, paddingRight: 50 }}
       >
         {modalStatus == MODAL_STATUS.PATIENT_COVID_RESULT_VIEW?
-            <AddCovidResultForm form ={form}/>:
-            //<ViewCovidResult form ={form}/> :
+        <ViewCovidResult form ={form}/> :
             <AddCovidResultForm form ={form}/>
+            
+            //<AddCovidResultForm form ={form}/>
         }
       </Form>
     </Modal>

@@ -17,6 +17,7 @@ export default function Covid19TestingPage() {
   const handleButtonClick = ()=>{
     postCovidAppoitment().then(
       (response)=>{
+        //alert(response.errorCode+response.errorMsg);
         if ( response.errorCode == 200){
           alert("核酸预约成功！");
         }else{
@@ -33,10 +34,12 @@ export default function Covid19TestingPage() {
       (response)=>{
         if ( response.errorCode == 200){
           alert("核酸查询成功！");
+          //alert(response.errorCode+response.errorMsg);
+          //alert(response.payload.report_time+' '+response.payload.state);
           setModalStatus(MODAL_STATUS.PATIENT_COVID_RESULT_VIEW);
           setModalVisible(true);
         }else{
-          alert("404 无核酸记录！！");
+          alert(response.errorCode + "无核酸记录！！");
         }
       }
     ).catch(()=>{
@@ -46,21 +49,8 @@ export default function Covid19TestingPage() {
   }
 
   const handleAddButtonClick = ()=>{
-    getLatestCovidResultResponse().then(
-      (response)=>{
-        if ( response.errorCode == 200){
-          //alert("核酸检测上传成功！");
           setModalStatus(MODAL_STATUS.DOCTOR_COVID_ADD_RESULT);
           setModalVisible(true);
-
-        }else{
-          alert("401非法ID!!");
-        }
-      }
-    ).catch(()=>{
-      alert("请检查网络！");
-    }
-    )
   }
 
   const onCreate = () => {
@@ -118,7 +108,7 @@ export default function Covid19TestingPage() {
         // className='ButtonBox'
         onClick={handleAddButtonClick}
         >
-          查看结果
+          上传结果
         </Button>
         :null
       }

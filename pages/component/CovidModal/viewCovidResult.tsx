@@ -15,6 +15,7 @@ const ViewCovidResult: React.FC<ViewCovidResultFormProps>=(
 )=>{
     const[value,setValue] = useState<GetLatestCovidResultResponse>();
     const getCovidResultInfo = async()=>{
+        //alert("here");
         let res = await getLatestCovidResultResponse();
         if(res.errorCode!=200){
             console.log(res.errorMsg);
@@ -22,10 +23,10 @@ const ViewCovidResult: React.FC<ViewCovidResultFormProps>=(
             return;
         }
         let currentResult = res.payload;
-        if(currentResult.reportTime == undefined){
-            currentResult.reportTime = '暂未出结果';
+        if(currentResult.report_time == undefined){
+            currentResult.report_time = '暂未出结果';
         }else{
-            currentResult.reportTime = getVisitTime(currentResult.reportTime);
+            currentResult.report_time = getVisitTime(currentResult.report_time);
         }
         
         form.setFieldsValue(currentResult);
@@ -40,28 +41,28 @@ const ViewCovidResult: React.FC<ViewCovidResultFormProps>=(
         <div>
             <Descriptions>
             {
-                value?.reportTime=='暂未出结果'?
+                value?.report_time=='暂未出结果'?
                     <Descriptions.Item label="报告状态">{'未出具'}</Descriptions.Item>
                 :
                 null
             }
             {
-                value?.reportTime=='暂未出结果'?
+                value?.report_time=='暂未出结果'?
                 null 
                 :
                 <Descriptions.Item label="报告状态">{'已出具'}</Descriptions.Item>
             }   
             {
-                value?.reportTime=='暂未出结果'?
+                value?.report_time=='暂未出结果'?
                     <Descriptions.Item label="报告时间">{'NULL'}</Descriptions.Item>
                 :
                 null
             }
             {
-                value?.reportTime=='暂未出结果'?
+                value?.report_time=='暂未出结果'?
                 null 
                 :
-                <Descriptions.Item label="报告时间">{value?.reportTime}</Descriptions.Item>
+                <Descriptions.Item label="报告时间">{value?.report_time}</Descriptions.Item>
             }
             <Descriptions.Item label="是否阳性">{value?.state==1?'阳性':'阴性'}</Descriptions.Item>
             </Descriptions>
