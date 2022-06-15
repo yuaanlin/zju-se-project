@@ -2,8 +2,9 @@ import SiderMenu from '../component/SiderMenu';
 import { Layout, Input, Button, Radio, Space, RadioChangeEvent } from 'antd';
 import React, { ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/router';
-import { createLogin, createSignup } from '../../services/utils/log';
+import { createLogin, createDoctorSignup, createPatientSignup } from '../../services/utils/log';
 import { useAuth } from '../context';
+
 
 
 const { Content } = Layout;
@@ -20,15 +21,24 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');   //  password
 
   const [name, setName] = useState('');
-  const [personalID, setPersonalID] = useState('');
   const [gender, setGender] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+
+  const [personalID, setPersonalID] = useState('');
   const [medicalInsuranceID, setMedicalInsuranceID] = useState('');
+
+  const [clinicID, setClinicID] = useState('');
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   const router = useRouter();
   const [logInfo, setLogInfo] = useState('');
 
+  const [signupIdentity, setSignupIdentity] = useState(false);    //  doctorSignup 
+                                            //         true      //  patientSignup
+
+ 
 
   const authProps = useAuth();
   
@@ -48,15 +58,24 @@ export default function LoginPage() {
 
   const handleSwitchClick = () => {
     setSignup(!signup);
+
     setIdentity('');
     setAccount('');
     setPassword('');
+
     setName('');
-    setPersonalID('');
     setGender('');
     setPhone('');
     setEmail('');
+    
+    setPersonalID('');
     setMedicalInsuranceID('');
+    
+    setClinicID('');
+    setTitle('');
+    setDescription('');
+    
+    setSignupIdentity(false);   //  默认为病人登录
     setLogInfo('');
   };
 
@@ -90,12 +109,51 @@ export default function LoginPage() {
   }
 
   const handleIdentityChange = (e: RadioChangeEvent) =>{
-    setIdentity(e.target.value);
+
+    if(signup){  //  注册
+      if(identity == e.target.value){ //  相当于没有变换身份, 不需要改变渲染项
+
+      }
+
+      else{   //  清空一些内容, 该边选项
+        if (e.target.value == "patient") setSignupIdentity(false);
+        else setSignupIdentity(true);
+
+        setPersonalID('');
+        setMedicalInsuranceID('');
+
+        setClinicID('');
+        setTitle('');
+        setDescription('');
+      }
+    }
+    setIdentity(e.target.value);  // 修改
   }
 
   const handleGenderChange = (e: RadioChangeEvent) =>{
     setGender(e.target.value);
   }
+
+
+
+
+
+  const handleClinicIDChange = (e: ChangeEvent<HTMLInputElement>) =>{
+    setClinicID(e.target.value);
+  }
+
+
+
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) =>{
+    setTitle(e.target.value);
+  }
+
+
+  const handleDescriptionChange = (e: ChangeEvent<HTMLInputElement>) =>{
+    setDescription(e.target.value);
+  }
+
+  
 
   const judgeString = (str : string) => {
     for (let i =0; i<str.length;i++){
@@ -110,90 +168,209 @@ export default function LoginPage() {
 
 
     if (signup) {   //  注册, 医生/患者
-      
-      if(account != '' && password != '' && identity != '' && name != '' && personalID != '' && gender != '' && phone != '' && email != '' && medicalInsuranceID != ''){
+
+      if (!signupIdentity) { //  病人注册
+        if(account != '' && password != '' && identity != '' && name != '' && personalID != '' && gender != '' && phone != '' && email != '' && medicalInsuranceID != ''){
         
-        //  判断ID 能否转化为number
-        if( judgeString(account) ){   //  可以封装数据包
-          // createSignup(Number(account), md5(account+password), identity,name,personalID,gender,phone,email,medicalInsuranceID)
-          createSignup(Number(account), password, identity,name,personalID,gender,phone,email,medicalInsuranceID)
-          .then((response)=>{
-            // console.log("OK")
-            
-            if ( response.errorCode == 200) { //  成功
+          //  判断ID 能否转化为number
+          if( judgeString(account) ){   //  可以封装数据包
+            // createSignup(Number(account), md5(account+password), identity,name,personalID,gender,phone,email,medicalInsuranceID)
+            createPatientSignup(Number(account), password, name, personalID, gender, phone, email, medicalInsuranceID)
+            .then((response)=>{
+              // console.log("OK")
+              
+              if ( response.errorCode == 200) { //  成功
+  
+                authProps.setLogin();
+                alert("注册成功！");
+                localStorage.setItem("identity", identity);
+                localStorage.setItem("token", response.payload.token);
+                
+                setIdentity('');
+                setAccount('');
+                setPassword('');
 
-              authProps.setLogin();
-              alert("注册成功！");
-              localStorage.setItem("identity", identity);
-              localStorage.setItem("token", response.payload.token);
-              setIdentity('');
-              setAccount('');
+                setName('');
+                setGender('');
+                setPhone('');
+                setEmail('');
+                
+                setPersonalID('');
+                setMedicalInsuranceID('');
+                
+                setClinicID('');
+                setTitle('');
+                setDescription('');
+
+                setLogInfo('');
+                router.push("/");
+              }
+  
+              else {  //  失败, 密码重设
+                setLogInfo(response.errorMsg);
+                setPassword('');
+              }
+  
+            })
+            .catch(()=>{
               setPassword('');
-              setName('');
-              setPersonalID('');
-              setGender('');
-              setPhone('');
-              setEmail('');
-              setMedicalInsuranceID('');
               setLogInfo('');
-              router.push("/");
-            }
-
-            else {  //  失败, 密码重设
-              setLogInfo(response.errorMsg);
-              setPassword('');
-            }
-
-          })
-          .catch(()=>{
+              alert("注册失败，请检查网络！");
+            })
+          }
+          else{
+            setLogInfo("请重新设置ID, 仅允许数字");
             setPassword('');
-            setLogInfo('');
-            alert("注册失败，请检查网络！");
-          })
+            setAccount('');
+          }
+        }
+  
+        else if (identity == ''){
+          setLogInfo("请选择注册身份");
+          setPassword('');
+        }
+        else if (account == ''){
+          setLogInfo("请输入用户ID");
+          setPassword('');
+        }
+        else if (password == ''){
+          setLogInfo("请输入密码");
+          setPassword('');
+        }
+        else if (name == ''){
+          setLogInfo("请输入用户姓名");
+          setPassword('');
+        }
+        else if (gender == ''){
+          setLogInfo("请选择性别");
+          setPassword('');
+        }
+        else if (phone == ''){
+          setLogInfo("请输入手机号");
+          setPassword('');
+        }
+        else if (email == ''){
+          setLogInfo("请输入个人邮箱");
+          setPassword('');
+        }
+        else if (personalID == ''){
+          setLogInfo("请输入个人ID");
+          setPassword('');
         }
         else{
-          setLogInfo("请重新设置ID, 仅允许数字");
+          setLogInfo("请输入医保序号");
           setPassword('');
-          setAccount('');
         }
       }
 
-      else if (identity == ''){
-        setLogInfo("请选择注册身份");
-        setPassword('');
+      else {    //  医生注册
+        if(account != '' && password != '' && identity != '' && name != '' && clinicID != '' && gender != '' && phone != '' && email != '' && title != '' && description != ''){
+        
+          //  判断ID 能否转化为number
+          if( judgeString(account) ){     //  判断两个ID是否合法
+
+            if ( judgeString(clinicID) ) {  //  可以封装数据包
+              // createSignup(Number(account), md5(account+password), identity,name,personalID,gender,phone,email,medicalInsuranceID)
+              createDoctorSignup(Number(account), password, name, Number(clinicID), gender,title, phone, email, description)
+              .then((response)=>{
+                // console.log("OK")
+                
+                if ( response.errorCode == 200) { //  成功
+    
+                  authProps.setLogin();
+                  alert("注册成功！");
+                  localStorage.setItem("identity", identity);
+                  localStorage.setItem("token", response.payload.token);
+                  
+                  setIdentity('');
+                  setAccount('');
+                  setPassword('');
+
+                  setName('');
+                  setGender('');
+                  setPhone('');
+                  setEmail('');
+                  
+                  setPersonalID('');
+                  setMedicalInsuranceID('');
+                  
+                  setClinicID('');
+                  setTitle('');
+                  setDescription('');
+
+                  setLogInfo('');
+                  router.push("/");
+                }
+    
+                else {  //  失败, 密码重设
+                  setLogInfo(response.errorMsg);
+                  setPassword('');
+                }
+    
+              })
+              .catch(()=>{
+                setPassword('');
+                setLogInfo('');
+                alert("注册失败，请检查网络！");
+              })
+            }
+
+            else{
+              setLogInfo("请重新设置门诊序号, 仅允许数字");
+              setPassword('');
+              setClinicID('');
+            }
+          }
+          else{
+            setLogInfo("请重新设置ID, 仅允许数字");
+            setPassword('');
+            setAccount('');
+          }
+        }
+  
+        else if (identity == ''){
+          setLogInfo("请选择注册身份");
+          setPassword('');
+        }
+        else if (account == ''){
+          setLogInfo("请输入用户ID");
+          setPassword('');
+        }
+        else if (password == ''){
+          setLogInfo("请输入密码");
+          setPassword('');
+        }
+        else if (name == ''){
+          setLogInfo("请输入用户姓名");
+          setPassword('');
+        }
+        else if (gender == ''){
+          setLogInfo("请选择性别");
+          setPassword('');
+        }
+        else if (phone == ''){
+          setLogInfo("请输入手机号");
+          setPassword('');
+        }
+        else if (email == ''){
+          setLogInfo("请输入个人邮箱");
+          setPassword('');
+        }
+        else if (clinicID == ''){
+          setLogInfo("请输入门诊序号");
+          setPassword('');
+        }
+        else if (title == ''){
+          setLogInfo("请输入职称");
+          setPassword('');
+        }
+        else{
+          setLogInfo("请输入简介");
+          setPassword('');
+        }
       }
-      else if (account == ''){
-        setLogInfo("请输入用户ID");
-        setPassword('');
-      }
-      else if (password == ''){
-        setLogInfo("请输入密码");
-        setPassword('');
-      }
-      else if (name == ''){
-        setLogInfo("请输入用户姓名");
-        setPassword('');
-      }
-      else if (personalID == ''){
-        setLogInfo("请输入个人ID");
-        setPassword('');
-      }
-      else if (gender == ''){
-        setLogInfo("请选择性别");
-        setPassword('');
-      }
-      else if (phone == ''){
-        setLogInfo("请输入手机号");
-        setPassword('');
-      }
-      else if (email == ''){
-        setLogInfo("请输入个人邮箱");
-        setPassword('');
-      }
-      else{
-        setLogInfo("请输入医保序号");
-        setPassword('');
-      }
+      
+      
     }
 
     else{   //  登录, 医生/患者/管理员
@@ -272,9 +449,9 @@ export default function LoginPage() {
                   style={{ marginTop: 16 , marginLeft:300 }} 
                   value={identity}
                   onChange={handleIdentityChange}
-                >
-                  <Radio.Button style ={{width : 174, textAlign : "center"}} value="doctor">医生 Doctor</Radio.Button>
+                > 
                   <Radio.Button style ={{width : 174, textAlign : "center"}} value="patient">患者 Patient</Radio.Button>
+                  <Radio.Button style ={{width : 174, textAlign : "center"}} value="doctor">医生 Doctor</Radio.Button>
                 </Radio.Group>
                 :
                 <Radio.Group 
@@ -282,8 +459,8 @@ export default function LoginPage() {
                 value={identity}
                 onChange={handleIdentityChange}
                 >
-                  <Radio.Button style ={{width : 108, textAlign : "center"}} value="doctor">医生 Doctor</Radio.Button>
                   <Radio.Button style ={{width : 108, textAlign : "center"}} value="patient">患者 Patient</Radio.Button>
+                  <Radio.Button style ={{width : 108, textAlign : "center"}} value="doctor">医生 Doctor</Radio.Button>
                   <Radio.Button style ={{width : 132, textAlign : "center"}} value="admin">管理员 Manager</Radio.Button>
                 </Radio.Group>
               }
@@ -314,13 +491,6 @@ export default function LoginPage() {
                   value={name}
                   onChange={handleNameInputChange}
                 />
-                <Input 
-                  style={{marginLeft: 300, width: 348}}
-                  className='InputBox' 
-                  placeholder="个人ID Personal ID" 
-                  value={personalID}
-                  onChange={handlePersonalIDInputChange}
-                />
                 <Space direction="horizontal">
                   <Radio.Group 
                     style={{ marginLeft:300 }} 
@@ -345,19 +515,63 @@ export default function LoginPage() {
                   value={email}
                   onChange={handleEmailInputChange}
                 />
-                <Input 
-                  style={{marginLeft: 300, width: 348}}
-                  className='InputBox' 
-                  placeholder="医保序号 Medical Insurance ID" 
-                  value={medicalInsuranceID}
-                  onChange={handleMedicalInsuranceIDInputChange}
-                />
+                {
+                  signupIdentity    //  true    医生
+                  ?
+                  <>
+                    <Input 
+                      style={{marginLeft: 300, width: 348}}
+                      className='InputBox' 
+                      placeholder="门诊序号 Clinic ID (Number Only)" 
+                      value={clinicID}
+                      onChange={handleClinicIDChange}
+                    />
+                    <Input 
+                      style={{marginLeft: 300, width: 348}}
+                      className='InputBox' 
+                      placeholder="职称 Title" 
+                      value={title}
+                      onChange={handleTitleChange}
+                    />
+                    <Input 
+                      style={{marginLeft: 300, width: 348}}
+                      className='InputBox' 
+                      placeholder="简介 Description" 
+                      value={description}
+                      onChange={handleDescriptionChange}
+                    />
+                  </>
+                  
+                  
+                  :                 //  false   病人
+
+                  <>
+                    <Input 
+                      style={{marginLeft: 300, width: 348}}
+                      className='InputBox' 
+                      placeholder="个人ID Personal ID" 
+                      value={personalID}
+                      onChange={handlePersonalIDInputChange}
+                    />
+                    <Input 
+                      style={{marginLeft: 300, width: 348}}
+                      className='InputBox' 
+                      placeholder="医保序号 Medical Insurance ID" 
+                      value={medicalInsuranceID}
+                      onChange={handleMedicalInsuranceIDInputChange}
+                    />
+                  </>
+                }
+
               </Space>
               :
               null
             }
 
 
+
+
+            
             <h2 style={{fontSize: 12, color: "red", marginLeft: 420}}>
               {logInfo}
             </h2>

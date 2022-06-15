@@ -23,6 +23,10 @@ export default function SiderMenu() {
     {
       key: 'Clinic 科室管理',
       url: '/clinic'
+    },
+    {
+      key: 'Doctor 医生管理',
+      url: '/doctor'
     }
   ];
   return (

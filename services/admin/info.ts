@@ -9,9 +9,8 @@ type Info =
 
 const getInfo = async ()=>{
     const res = await request<{userInfo:Info}>({
-        method: 'POST'
-    ,   url: "/api/patient/info/getInfo"
-    ,   data: {}
+        method: 'GET'
+    ,   url: "/api/admin/info/getInfo"
     })
     if(200==res.errorCode)
         return res.payload.userInfo
@@ -21,7 +20,7 @@ const getInfo = async ()=>{
 
 const updateInfo = async (info:Info)=> await request<{}>({
     method: 'POST'
-,   url: "/api/patient/info/updateInfo"
+,   url: "/api/admin/info/updateInfo"
 ,   data: info
 })
 
