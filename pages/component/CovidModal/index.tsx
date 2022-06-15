@@ -72,8 +72,6 @@ const CovidModal: React.FC<CovidtModalProps>=({
           ).catch((info) => {
             console.log('Covid Result Post Failed:', info);
           });
-          form.resetFields();
-          onCancel();
         }else{
           form.resetFields();
           onCancel();
