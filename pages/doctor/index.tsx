@@ -24,11 +24,12 @@ export default function DoctorPage() {
   async function onUpdateDoctor(v: DoctorType, n: any) {
     if (!editingDoctor) return;
     const res = await updateDoctor({ ...v, ...n });
-    await getDoctorList();
     if (res.errorCode !== 200) {
       message.error(res.errorMsg);
       return;
     }
+    await getDoctorList();
+    message.success('医生更改成功;)');
     setModalVisible(false);
   }
 
@@ -162,7 +163,9 @@ const UpdateDoctorModal: React.FC<UpdateDoctorModalProps> = (props) => {
     if (!doctor) return;
     form.setFieldsValue({
       name: doctor.name,
-      description: doctor.description
+      description: doctor.description,
+      phone: doctor.phone,
+      email: doctor.email,
     });
   }, [doctor]);
 
