@@ -1,8 +1,17 @@
 import { Layout, Menu } from 'antd';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 const { Sider } = Layout;
 export default function SiderMenu() {
+  const [identity, setIdentity] = useState<string|null>('');
+  useEffect(() => {
+    let i = localStorage.getItem('identity');
+    setIdentity(i);
+  }, []);
+  const adminList = [3, 4, 5];
+  const patientList = [0, 1, 2];
+  const doctorList = [0, 1, 2, 3];
   const menuList: { key: string; url: string }[] = [
     {
       key: 'Appointment 预约',
@@ -35,15 +44,27 @@ export default function SiderMenu() {
         mode={'inline'}
         style={{ height: '100%', borderRight: 0 }}
       >
-        {menuList.map(item => {
-          if(item) {
-            return (
-              <Menu.Item key={item.key}>
-                <Link href={item.url}><a>{item.key}</a></Link>
-              </Menu.Item>
-            );
-          }
-        })}
+        {menuList
+          .filter((x, idx) => {
+            if (identity === 'admin'){
+              return idx in adminList ? true : false;
+            } else if (identity === 'patient'){
+              return idx in patientList ? true : false;
+            } else if (identity === 'doctor'){
+              return idx in doctorList ? true : false;
+            } else {
+              return false;
+            }
+          })
+          .map(item => {
+            if(item) {
+              return (
+                <Menu.Item key={item.key}>
+                  <Link href={item.url}><a>{item.key}</a></Link>
+                </Menu.Item>
+              );
+            }
+          })}
       </Menu>
     </Sider>
   );
