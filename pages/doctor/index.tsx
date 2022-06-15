@@ -39,7 +39,7 @@ export default function DoctorPage() {
       return;
     }
     await getDoctorList();
-    message.success(`科室 ${doctor.name} 已被删除`);
+    message.success(`医生 ${doctor.name} 已被删除`);
   }
 
   const columns = [

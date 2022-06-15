@@ -5,10 +5,10 @@ export function createClinic(name: string, description: string) {
   return request<{}>({
     url: '/api/admin/addClinic',
     method: 'POST',
-    data: JSON.stringify({
+    data: {
       name,
       description
-    })
+    }
   });
 }
 
@@ -29,9 +29,9 @@ export function updateClinic(
   return request<{}>({
     url: `/api/admin/${clinicId}/updateClinic`,
     method: 'POST',
-    data: JSON.stringify({
+    data: {
       name,
       desc: description
-    })
+    }
   });
 }
