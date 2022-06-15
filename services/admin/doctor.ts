@@ -16,7 +16,7 @@ export function createDoctor(param: DoctorType) {
   return request<{}>({
     url: '/api/admin/addDoctor',
     method: 'POST',
-    data: JSON.stringify(param)
+    data: param
   });
 }
 
@@ -45,6 +45,6 @@ export function updateDoctor(param: DoctorType) {
   return request<{}>({
     url: '/api/admin/updateDoctor',
     method: 'POST',
-    data: JSON.stringify(param)
+    data: param
   });
 }
