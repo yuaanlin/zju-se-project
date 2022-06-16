@@ -48,8 +48,8 @@ const CovidModal: React.FC<CovidtModalProps>=({
     <Modal
       visible={visible}
       title="核酸检测结果"
-      okText="明白了"
-      cancelText="Cancel"
+      okText="上传结果"
+      cancelText="取消上传"
       onCancel={() => {
         form.resetFields();
         onCancel();

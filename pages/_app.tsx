@@ -28,7 +28,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Footer
           style={{ textAlign: 'center' }}
         >
-          ZJU SE ©2022 Created by xxx
+          ZJU SE ©2022 Created
         </Footer>
       </Layout>
     </AuthContext.Provider>

@@ -11,7 +11,7 @@ export default function SiderMenu() {
   }, []);
   const adminList = [3, 4, 5, 6];
   const patientList = [0, 1, 2];
-  const doctorList = [0, 1, 2, 3];
+  const doctorList = [0, 1, 2];
   const menuList: { key: string; url: string }[] = [
     {
       key: 'Appointment 预约',

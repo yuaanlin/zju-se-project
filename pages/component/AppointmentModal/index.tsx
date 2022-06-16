@@ -87,9 +87,9 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   return (
     <Modal
       visible={visible}
-      title="预约模块"
-      okText="Create"
-      cancelText="Cancel"
+      title="预约信息"
+      okText="确定"
+      cancelText="取消"
       onCancel={() => {
         form.resetFields();
         onCancel();

@@ -66,7 +66,7 @@ const PageHeader  = () =>{
         onClick={handleButtonClick}
         style={{textAlign : 'center', float : 'right', height : 38, borderRadius: 19, fontSize : 16, marginLeft : 700}}
       >
-        { useAuth().login_done ? "退出" : "登录/注册" }
+        { useAuth().login_done ? "注销" : "登录/注册" }
 
       </Button>
       {/* </Link> */}

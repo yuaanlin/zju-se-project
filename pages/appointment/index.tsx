@@ -46,6 +46,10 @@ const tagColor = [
 
 export default function AppointmentPage() {
   const [identity, setIdentity] = useState<string|null>('');
+  useEffect(() => {
+    let i = localStorage.getItem('identity');
+    setIdentity(i);
+  }, []);
   const [modalVisible, setModalVisible] = useState(false);
   const [consultationId, setConsultationId] = useState<number|undefined>(undefined);
   const [modalStatus, setModalStatus] = useState(MODAL_STATUS.USER_ADD_APPOINTMENT);
@@ -81,6 +85,7 @@ export default function AppointmentPage() {
 
   const getAppointmentList = async () => {
     let res ;
+    // alert(identity)
     if (identity === 'patient')
       res = await getAppointment();
     else

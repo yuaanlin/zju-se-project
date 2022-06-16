@@ -383,7 +383,7 @@ export default function LoginPage() {
           .then((response)=>{
             if ( response.errorCode == 200) { //  成功
               authProps.setLogin();
-
+              // useAuth().login_done = true;
               alert("登录成功！");
               localStorage.setItem("identity", identity);
               localStorage.setItem("token", response.payload.token);

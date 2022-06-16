@@ -173,7 +173,7 @@ const UpdateDoctorModal: React.FC<UpdateDoctorModalProps> = (props) => {
     <Modal
       visible={!!doctor}
       title="编辑医生信息"
-      okText="送出"
+      okText="确认"
       cancelText="取消"
       onCancel={() => {
         form.resetFields();

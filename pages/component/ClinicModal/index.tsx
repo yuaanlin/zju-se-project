@@ -25,8 +25,8 @@ const AppointmentModal: React.FC<ClinicModalProps> = ({
     <Modal
       visible={visible}
       title="新增科室"
-      okText="送出"
-      cancelText="取消"
+      okText="确认新增"
+      cancelText="取消新增"
       onCancel={() => {
         form.resetFields();
         onCancel();

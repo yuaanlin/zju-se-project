@@ -214,7 +214,7 @@ const UpdateClinicModal: React.FC<UpdateClinicModalProps> = (props) => {
     <Modal
       visible={!!clinic}
       title="编辑科室信息"
-      okText="送出"
+      okText="确定"
       cancelText="取消"
       onCancel={() => {
         form.resetFields();
