@@ -39,7 +39,7 @@ export default function Covid19TestingPage() {
           setModalStatus(MODAL_STATUS.PATIENT_COVID_RESULT_VIEW);
           setModalVisible(true);
         }else{
-          alert(response.errorCode + "无核酸记录！！");
+          alert("暂无核酸结果！");
         }
       }
     ).catch(()=>{

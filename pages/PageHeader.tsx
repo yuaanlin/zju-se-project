@@ -25,7 +25,7 @@ const PageHeader  = () =>{
     else{       //  退出
       //  统一成一个数据包, 对应的格式都相同
       
-      createLogout(JSON.stringify( localStorage.getItem("identity") ) )
+      createLogout(String(localStorage.getItem("identity")) )
       .then((response)=>{
 
         if ( response.errorCode == 200) { //  成功

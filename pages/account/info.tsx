@@ -52,7 +52,7 @@ const PatientInfo = ({info}:{info:patient.Info})=>{
     >
     <Form.Item name="id" label="ID"><Input /></Form.Item>
     <Form.Item name="name" label="名字"><Input /></Form.Item>
-    <Form.Item name="personaID" label="身份号码"><Input /></Form.Item>
+    <Form.Item name="personalID" label="身份号码"><Input /></Form.Item>
     <Form.Item name="gender" label="性别"><Gender /></Form.Item>
     <Form.Item name="phone" label="电话号码"><Input /></Form.Item>
     <Form.Item name="email" label="邮件"><Input /></Form.Item>
