@@ -1,42 +1,35 @@
 import SiderMenu from '../component/SiderMenu';
-import { getClinics } from '../../services/patient/appointment';
-import ClinicModal from '../component/ClinicModal';
 import {
-  createClinic,
-  deleteClinic,
-  updateClinic
-} from '../../services/admin/clinic';
+  getVisits,
+  createVisit,
+  deleteVisit,
+} from '../../services/admin/visit';
+import { VisitType } from '../../services/admin/visit';
+import { getVisitTime } from '../component/AppointmentModal/addAppointmentForm';
+import { DoctorType, getDoctors } from '../../services/admin/doctor';
 import {
   Button,
   Form,
   Input,
   Layout,
   message,
-  Modal,
+  Modal, Select,
   Space,
   Table
 } from 'antd';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
 
-type ClinicType = {
-  key: string,
-  clinic_id: number,
-  name: string,
-  description: string
-}
-
-export default function ClinicPage() {
+export default function VisitPage() {
   const [modalVisible, setModalVisible] = useState(false);
-  const [editingClinic, setEditingClinic] = useState<ClinicType>();
-  const [appTable, setAppTable] = useState<ClinicType[]>([]);
+  const [appTable, setAppTable] = useState<VisitType[]>([]);
   const [identity, setIdentity] = useState<string|null>('');
 
-  async function onCreateClinic(v: any) {
-    const res = await createClinic(v.name, v.description);
-    await getClinicList();
+  async function onCreateVisit(v: any) {
+    const res = await createVisit(v.doctorID, v.visitTime);
+    await getVisitList();
     if (res.errorCode !== 200) {
       message.error(res.errorMsg);
       return;
@@ -45,57 +38,52 @@ export default function ClinicPage() {
     setModalVisible(false);
   }
 
-  async function onUpdateClinic(v: any) {
-    if (!editingClinic) return;
-    const res = await updateClinic(
-      editingClinic.clinic_id, v.name, v.description);
+  async function onDeleteVisit(visit: VisitType) {
+    const res = await deleteVisit(visit.id);
+    console.log(res);
     if (res.errorCode !== 200) {
       message.error(res.errorMsg);
       return;
     }
-    message.success('科室更改成功;)');
-    await getClinicList();
-    setModalVisible(false);
-  }
-
-  async function onDeleteClinic(clinic: ClinicType) {
-    const res = await deleteClinic(clinic.clinic_id);
-    await getClinicList();
-    if (res.errorCode !== 200) {
-      message.error(res.errorMsg);
-      return;
-    }
-    message.success(`科室 ${clinic.name} 已被删除`);
+    message.success(`问诊 ${visit.visit_time} 已被删除`);
+    await getVisitList();
   }
 
   const columns = [
     {
-      title: '科室编号',
-      dataIndex: 'clinic_id',
-      key: 'clinic_id',
+      title: '问诊编号',
+      dataIndex: 'id',
+      key: 'id',
     },
     {
-      title: '科室名',
-      dataIndex: 'name',
-      key: 'name',
+      title: '医生编号',
+      dataIndex: 'doctor_id',
+      key: 'doctor_id',
     },
     {
-      title: '科室描述',
-      dataIndex: 'description',
-      key: 'description',
+      title: '剩余人数',
+      dataIndex: 'number_of_patients',
+      key: 'number_of_patients',
+    },
+    {
+      title: '问诊时间',
+      dataIndex: 'visit_time',
+      key: 'visit_time',
+      render: (_: string, record: VisitType) => (
+        <Space size="middle">
+          {record.visit_time ? getVisitTime(record.visit_time) : null}
+        </Space>
+      ),
     },
     {
       title: '操作',
       key: 'action',
-      render: (_: string, record: ClinicType) => (
+      render: (_: string, record: VisitType) => (
         <Space size="middle">
           {
             identity === 'admin' ?
               <>
-                <a onClick={() => setEditingClinic(record)}>
-                  修改信息
-                </a>
-                <a onClick={() => onDeleteClinic(record)}>
+                <a onClick={() => onDeleteVisit(record)}>
                   删除
                 </a>
               </>: <>没有操作权限</>
@@ -105,8 +93,9 @@ export default function ClinicPage() {
     },
   ];
 
-  const getClinicList = async () => {
-    let res = await getClinics();
+  const getVisitList = async () => {
+    let res = await getVisits();
+    console.log(res);
     if (res.errorCode != 200) {
       message.error(res.errorMsg);
       return;
@@ -114,7 +103,7 @@ export default function ClinicPage() {
     let newappTable = res.payload.msg.map(x => {
       return {
         ...x,
-        key: x.clinic_id.toString()
+        key: x.id.toString()
       };
     });
     setAppTable(newappTable);
@@ -123,7 +112,7 @@ export default function ClinicPage() {
   useEffect(() => {
     let i = localStorage.getItem('identity');
     setIdentity(i);
-    getClinicList();
+    getVisitList();
   }, []);
 
   return (
@@ -139,14 +128,8 @@ export default function ClinicPage() {
         }}
       >
         <div>
-          <h1>科室/管理平台</h1>
+          <h1>问诊/管理平台</h1>
           <Table
-            onRow={record => {
-              return {
-                onClick: () => {
-                }
-              };
-            }}
             pagination={{
               position: ['bottomCenter'],
               hideOnSinglePage: true,
@@ -155,17 +138,13 @@ export default function ClinicPage() {
             columns={columns}
             dataSource={appTable}
           />
-          <ClinicModal
+          <VisitModal
             visible={modalVisible}
-            onCreate={onCreateClinic}
+            onCreate={onCreateVisit}
             onCancel={() => {
               setModalVisible(false);
             }}
           />
-          <UpdateClinicModal
-            clinic={editingClinic}
-            onSubmit={onUpdateClinic}
-            onCancel={() => setEditingClinic(undefined)} />
         </div>
         {
           identity === 'admin' ?
@@ -187,33 +166,64 @@ export default function ClinicPage() {
   );
 }
 
-interface UpdateClinicModalProps {
-  clinic?: ClinicType;
-  onSubmit: (values: any) => void;
+const timeListValue = [
+  '11',
+  '12',
+  '21',
+  '22',
+  '31',
+  '32',
+  '41',
+  '42',
+  '51',
+  '52',
+  '61',
+  '62',
+  '71',
+  '72',
+];
+const timeList = timeListValue.map(x=>{
+  return { label: getVisitTime(x), value: x };
+});
+
+interface Values {
+  doctorID: number, visitTime: string
+}
+
+interface VisitModalProps {
+  visible: boolean;
+  onCreate: (values: Values) => void;
   onCancel: () => void;
 }
 
-const UpdateClinicModal: React.FC<UpdateClinicModalProps> = (props) => {
+const VisitModal: React.FC<VisitModalProps> = (props) => {
   const {
-    clinic,
-    onSubmit,
+    visible,
+    onCreate,
     onCancel
   } = props;
-
+  const [docterList, setDoctorList] = useState<{label: string, value: number}[]>([]);
   const [form] = Form.useForm();
 
-  useEffect(() => {
-    if (!clinic) return;
-    form.setFieldsValue({
-      name: clinic.name,
-      description: clinic.description
+  const getDoctorList = async () => {
+    let res = await getDoctors();
+    if (res.errorCode != 200) {
+      message.error(res.errorMsg);
+      return;
+    }
+    let docList = res.payload.msg.map(x => {
+      return { label: x.name, value: x.id };
     });
-  }, [clinic]);
+    setDoctorList(docList);
+  };
+  useEffect(()=> {
+    getDoctorList();
+  }, []);
 
   return (
     <Modal
-      visible={!!clinic}
-      title="编辑科室信息"
+      visible={visible}
+      title="新增医生问诊时间"
       okText="送出"
       cancelText="取消"
       onCancel={() => {
@@ -224,8 +234,8 @@ const UpdateClinicModal: React.FC<UpdateClinicModalProps> = (props) => {
         form
           .validateFields()
           .then(values => {
-            onSubmit(values);
             form.resetFields();
+            onCreate(values);
           })
           .catch(async info => {
             await message.error(info);
@@ -242,29 +252,33 @@ const UpdateClinicModal: React.FC<UpdateClinicModalProps> = (props) => {
         }}
       >
         <Form.Item
-          name="name"
-          label="科室名称"
+          name="doctorID"
+          label="医生"
           rules={[
             {
               required: true,
-              message: '请填写科室名称'
+              message: '请选择医生名称'
             },
           ]}
         >
-          <Input />
+          <Select
+            options={docterList}
+          />
         </Form.Item>
 
         <Form.Item
-          name="description"
-          label="科室描述"
+          name="visitTime"
+          label="就诊时间"
           rules={[
             {
               required: true,
               message: '请填写科室描述'
-            }
+            },
           ]}
         >
-          <Input />
+          <Select
+            options={timeList}
+          />
         </Form.Item>
       </Form>
     </Modal>
