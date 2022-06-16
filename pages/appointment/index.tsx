@@ -86,6 +86,7 @@ export default function AppointmentPage() {
 
   const getAppointmentList = async () => {
     let res ;
+    let identity = localStorage.getItem('identity');
     if (identity === 'patient')
       res = await getAppointment();
     else
