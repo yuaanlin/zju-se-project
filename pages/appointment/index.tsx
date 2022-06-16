@@ -85,7 +85,6 @@ export default function AppointmentPage() {
       res = await getAppointment();
     else
       res = await getAllConsultation();
-    console.log(res);
     if (res.errorCode != 200) {
       message.error(res.errorMsg);
       return;

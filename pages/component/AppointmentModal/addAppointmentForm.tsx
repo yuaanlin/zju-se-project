@@ -2,8 +2,8 @@ import { getClinicDoctors, getClinics, getDoctorTimeSurplus } from '../../../ser
 import React, { useEffect, useState } from 'react';
 import { Cascader, Form, message, Select } from 'antd';
 export const getVisitTime = (visit_time: string) => {
-  let date = visit_time.substring(0, 1);
-  let time = visit_time.substring(-1);
+  let date = visit_time.charAt(0);
+  let time = visit_time.charAt(1);
   switch (date){
     case '1':
       date = '星期一';

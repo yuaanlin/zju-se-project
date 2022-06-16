@@ -7,10 +7,9 @@ export default function SiderMenu() {
   const [identity, setIdentity] = useState<string|null>('');
   useEffect(() => {
     let i = localStorage.getItem('identity');
-    console.log(i);
     setIdentity(i);
   }, []);
-  const adminList = [3, 4, 5];
+  const adminList = [3, 4, 5, 6];
   const patientList = [0, 1, 2];
   const doctorList = [0, 1, 2, 3];
   const menuList: { key: string; url: string }[] = [
@@ -37,6 +36,10 @@ export default function SiderMenu() {
     {
       key: 'Doctor 医生管理',
       url: '/doctor'
+    },
+    {
+      key: 'Visit 医生问诊管理',
+      url: '/visit'
     }
   ];
   return (
@@ -48,7 +51,6 @@ export default function SiderMenu() {
         {menuList
           .filter((x, idx) => {
             if (identity === 'admin'){
-              console.log(idx, idx in adminList);
               return adminList.includes(idx);
             } else if (identity === 'patient'){
               return patientList.includes(idx);
