@@ -21,7 +21,7 @@ type PatientSingupType = {
 type DoctorSignupType = {
   id  : number,
   md5 : string,
-  acatar : string,  //  Base64
+  avatar : string,  //  Base64
   name : string,
   cliniclID : number,
   gender : string,

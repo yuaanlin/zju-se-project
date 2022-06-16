@@ -3,7 +3,7 @@ import { Layout, Input, Button, Radio, Space, RadioChangeEvent } from 'antd';
 import React, { ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 import { createLogin, createDoctorSignup, createPatientSignup } from '../../services/utils/log';
-import { useAuth } from '../context';
+import { useAuth } from '../_app';
 
 
 
@@ -163,9 +163,9 @@ export default function LoginPage() {
 
   const handleButtonClick = () =>{
 
-
+    // authProps.setLogin();
     if (signup) {   //  注册, 医生/患者
-
+      
       if (!signupIdentity) { //  病人注册
         if(account != '' && password != '' && identity != '' && name != '' && personalID != '' && gender != '' && phone != '' && email != '' && medicalInsuranceID != ''){
         
@@ -422,6 +422,8 @@ export default function LoginPage() {
         setPassword('');
       }
     }
+    
+    // console.log(authProps.login_done);
 
   }
 
@@ -568,7 +570,7 @@ export default function LoginPage() {
 
 
 
-            
+
             <h2 style={{fontSize: 12, color: "red", marginLeft: 420}}>
               {logInfo}
             </h2>

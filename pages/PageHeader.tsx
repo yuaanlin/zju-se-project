@@ -6,7 +6,7 @@ import React from 'react';
 import Link from 'next/link';
 
 import { createLogout } from '../services/utils/log';
-import { useAuth } from './context';
+import { useAuth } from './_app';
 
 const { Header } = Layout;
 
@@ -15,9 +15,10 @@ const PageHeader  = () =>{
 
 
   const authProps = useAuth();
+  // console.log(authProps);
 
   const handleButtonClick = () => {
-    // if ( localStorage.getItem("token") == null ) { //  登录/注册
+    // if ( localStosrage.getItem("token") == null ) { //  登录/注册
     if ( !authProps.login_done) { //  登录/注册
       router.push("/login");
     }
@@ -66,7 +67,7 @@ const PageHeader  = () =>{
         onClick={handleButtonClick}
         style={{textAlign : 'center', float : 'right', height : 38, borderRadius: 19, fontSize : 16, marginLeft : 700}}
       >
-        { useAuth().login_done ? "退出" : "登录/注册" }
+        { authProps.login_done ? "退出" : "登录/注册" }
 
       </Button>
       {/* </Link> */}
