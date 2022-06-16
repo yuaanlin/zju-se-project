@@ -2,20 +2,47 @@ import '../styles/globals.css';
 import 'antd/dist/antd.css';
 import { Layout } from 'antd';
 import type { AppProps } from 'next/app';
-import React from 'react';
-import  { AuthContext, useAuth } from './context';
+import React, { createContext, useContext, useState } from 'react';
 import PageHeader from './PageHeader';
 
 const { Footer } = Layout;
 
 
+/*  AuthContext & Provider  */
+export interface LoginContextData {
+  login_done : boolean,
+  setLogin : () => void,
+  setLogout : () => void
+}
+const setDefault = () =>{
+
+}
+
+const LoginContextDataDefaultValue: LoginContextData = {
+  login_done : false,
+  setLogin : setDefault,
+  setLogout : setDefault
+};
+
+export const AuthContext = createContext<LoginContextData>(LoginContextDataDefaultValue);
+
+export function useAuth() {
+  return useContext(AuthContext);
+}
 
 function MyApp({ Component, pageProps }: AppProps) {
 
-  const LoginValue = useAuth();
+  const [login_done, setLoginDone] = useState(false);
+  const setLogin = () => {
+    setLoginDone(true);
+  }
+
+  const setLogout = () => {
+    setLoginDone(false);
+  }
   
   return (
-    <AuthContext.Provider value = {LoginValue} >
+    <AuthContext.Provider value = {{login_done, setLogin, setLogout}} >
       <Layout>
         <PageHeader/>
         <Layout
