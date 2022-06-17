@@ -444,19 +444,19 @@ export default function LoginPage() {
                 >
                   <Radio.Button style ={{ width : 108, textAlign : 'center' }} value="patient">患者 Patient</Radio.Button>
                   <Radio.Button style ={{ width : 108, textAlign : 'center' }} value="doctor">医生 Doctor</Radio.Button>
-                  <Radio.Button style ={{ width : 132, textAlign : 'center' }} value="admin">管理员 Manager</Radio.Button>
+                  <Radio.Button style ={{ width : 134, textAlign : 'center' }} value="admin">管理员 Manager</Radio.Button>
                 </Radio.Group>
             }
           </Space>
           <Input
-            style={{ marginLeft: 300, width: 348 }}
+            style={{ marginLeft: 300, width: 350 }}
             className="InputBox"
             placeholder="ID 仅支持数字 ID (Number Only)"
             value={account}
             onChange={handleAccountInputChange}
           />
           <Input.Password
-            style={{ marginLeft: 300, width: 348 }}
+            style={{ marginLeft: 300, width: 350 }}
             className="InputBox"
             placeholder="密码 Password"
             value={password}
