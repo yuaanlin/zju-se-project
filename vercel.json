@@ -3,6 +3,10 @@
     {
       "source": "/api/:match*",
       "destination": "http://116.62.230.9:4000/api/:match*/"
+    },
+    {
+      "source": "/doctorPhotos/:match*",
+      "destination": "http://116.62.230.9:4000/doctorPhotos/:match*/"
     }
   ]
 }

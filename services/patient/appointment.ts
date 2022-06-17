@@ -43,10 +43,11 @@ export function getDoctorTimeSurplus(doctorId: string) {
 }
 
 /** 预约门诊 */
-export function createAppointment(visitID: string) {
+export function createAppointment(visitID: string, description: string) {
   return request<{}>({
     url: `/api/patient/appointment/${visitID}/makeApp`,
-    method: 'POST'
+    method: 'POST',
+    data: { patient_description: description }
   });
 }
 
