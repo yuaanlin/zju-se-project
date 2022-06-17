@@ -1,4 +1,4 @@
-import { Button, Layout, Menu, Space } from 'antd';
+import { Button, Layout, Menu, message, Space } from 'antd';
 // import '../styles/globals.css';
 import 'antd/dist/antd.css';
 import { useRouter } from 'next/router';
@@ -32,19 +32,19 @@ const PageHeader  = () =>{
           // setLoginDone(false);
           authProps.setLogout();
 
-          alert("退出成功！");
+          message.success("退出成功！");
           localStorage.removeItem("identity");
           localStorage.removeItem("token");
           router.push("/");
         }
         else {  //  失败,
-          alert("退出失败！");
-          alert(response.errorMsg);
+          message.error("退出失败！");
+          message.error(response.errorMsg);
         }
 
       })
       .catch(()=>{
-        alert("退出失败，请检查网络！");
+        message.error("退出失败，请检查网络！");
       });
 
     }
