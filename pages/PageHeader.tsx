@@ -48,7 +48,11 @@ const PageHeader = () =>{
 
   return (
     <Header className={'header'}>
-      <Space direction="horizontal">
+      <div
+        style={{
+          display: 'flex', justifyContent: 'space-between',
+          width: '100%', alignItems: 'center'
+        }}>
         <div className={'logo'} >
           <Link href="/">
             <h1
@@ -60,12 +64,14 @@ const PageHeader = () =>{
         </div>
         <Button
           onClick={handleButtonClick}
-          style={{ textAlign : 'center', float : 'right', height : 38, borderRadius: 19, fontSize : 16, marginLeft : 700 }}
+          style={{
+            textAlign : 'center', float : 'right',
+            height : 38, borderRadius: 19, fontSize : 16
+          }}
         >
           { authProps.login_done ? '退出' : '登录/注册' }
-
         </Button>
-      </Space>
+      </div>
       <Menu theme={'dark'} mode={'horizontal'} />
     </Header>
   );
