@@ -17,7 +17,7 @@ const ViewAppointmentForm: React.FC<ViewAppointmentFormProps> = ({
   form
 }) => {
   const [value, setValue] = useState<ConsultationRecordType>();
-  const getAppointmentInfo = async (value: number) => {  
+  const getAppointmentInfo = async (value: number) => {
     let res = await getOneAppointment(value);
     if (res.errorCode != 200) {
       console.log(res.errorMsg);
