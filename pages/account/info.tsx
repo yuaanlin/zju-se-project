@@ -67,8 +67,8 @@ const DoctorInfo = ({ info }:{info:doctor.Info})=>{
   {
     console.log('update', info);
     doctor.updateInfo(info)
-      .then(()=>console.log('done'))
-      .catch(()=>console.log('fail'));
+      .then(()=>alert("信息修改成功"))
+      .catch(()=>alert("信息修改失败"));
   };
   return (<>
     <SiderMenu />
