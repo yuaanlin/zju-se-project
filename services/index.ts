@@ -1,5 +1,3 @@
-import { API_URL } from '../config';
-
 interface RequestOption {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   url: string;
@@ -18,7 +16,7 @@ export async function request<ResponsePayloadType>(opt: RequestOption) {
   const tokenInLocalStorage = localStorage.getItem('token');
   if (tokenInLocalStorage)
     headers['Authorization'] = 'Bearer ' + tokenInLocalStorage;
-  const res = await fetch(API_URL + opt.url, {
+  const res = await fetch(opt.url, {
     headers,
     method: opt.method,
     body: JSON.stringify(opt.data),
