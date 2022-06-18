@@ -95,7 +95,7 @@ export async function createPatientSignup(signupID: number, signupMD5: string,  
 
 /** 发送退出请求  三种身份合为一个函数, 对应的响应payload 为 {}  */
 export async function createLogout(identity: string) {
-  // console.log(identity);
+  // alert(identity);
   return request<{}>({
     url: `/api/${identity}/logout`,
     method: 'POST',

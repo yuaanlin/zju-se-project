@@ -1,12 +1,11 @@
 import '../styles/globals.css';
 import 'antd/dist/antd.css';
-import { Layout } from 'antd';
-import type { AppProps } from 'next/app';
-import React, { createContext, useContext, useState } from 'react';
 import PageHeader from './PageHeader';
+import { Layout } from 'antd';
+import React, { createContext, useContext, useState } from 'react';
+import type { AppProps } from 'next/app';
 
 const { Footer } = Layout;
-
 
 /*  AuthContext & Provider  */
 export interface LoginContextData {
@@ -16,7 +15,7 @@ export interface LoginContextData {
 }
 const setDefault = () =>{
 
-}
+};
 
 const LoginContextDataDefaultValue: LoginContextData = {
   login_done : false,
@@ -35,14 +34,14 @@ function MyApp({ Component, pageProps }: AppProps) {
   const [login_done, setLoginDone] = useState(false);
   const setLogin = () => {
     setLoginDone(true);
-  }
+  };
 
   const setLogout = () => {
     setLoginDone(false);
-  }
-  
+  };
+
   return (
-    <AuthContext.Provider value = {{login_done, setLogin, setLogout}} >
+    <AuthContext.Provider value = {{ login_done, setLogin, setLogout }} >
       <Layout>
         <PageHeader/>
         <Layout
@@ -55,7 +54,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <Footer
           style={{ textAlign: 'center' }}
         >
-          ZJU SE ©2022 Created by xxx
+          ZJU SE ©2022 Created
         </Footer>
       </Layout>
     </AuthContext.Provider>

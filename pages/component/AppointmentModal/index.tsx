@@ -36,9 +36,9 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
 }) => {
   const [form] = Form.useForm();
 
-  const createApp = async (visitId : string) => {
+  const createApp = async (visitId : string, description: string) => {
     try {
-      let res = await createAppointment(visitId);
+      let res = await createAppointment(visitId, description);
       if (res.errorCode != 200) {
         message.error(res.errorMsg);
         return;
@@ -73,7 +73,7 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   const setModeFunction = (values: any) => {
     let res;
     if(modalStatus === MODAL_STATUS.USER_ADD_APPOINTMENT) {
-      res = createApp(values.time);
+      res = createApp(values.time, values.description);
     } else if (modalStatus === MODAL_STATUS.DOCTOR_EDIT_ADD_APPOINTMENT) {
       res = updateApp(values.advice, values.medications);
     }
@@ -81,15 +81,15 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
   };
   const onOK = async (values: any) => {
     form.resetFields();
-    let res = await setModeFunction(values);
+    await setModeFunction(values);
     onCreate(values);
   };
   return (
     <Modal
       visible={visible}
-      title="预约模块"
-      okText="Create"
-      cancelText="Cancel"
+      title="预约信息"
+      okText="确定"
+      cancelText="取消"
       onCancel={() => {
         form.resetFields();
         onCancel();
@@ -107,18 +107,23 @@ const AppointmentModal: React.FC<AppointmentModalProps> = ({
         form={form}
         layout="vertical"
         name="form_in_modal"
-        onValuesChange={(v, all)=>{
-          console.log(all);
-        }}
         style={{ paddingLeft: 50, paddingRight: 50 }}
       >
         {
           modalStatus === MODAL_STATUS.USER_ADD_APPOINTMENT ?
-            <AddAppointmentForm /> :
-            modalStatus === MODAL_STATUS.USER_VIEW_APPOINTMENT && consultationId ?
-              <ViewAppointmentForm consultationId={consultationId} form={form}/> :
-              modalStatus === MODAL_STATUS.DOCTOR_EDIT_ADD_APPOINTMENT && consultationId ?
-                <AddAdviceAppointmentForm consultationId={consultationId} form={form} /> : null
+            <AddAppointmentForm />
+            : modalStatus === MODAL_STATUS.USER_VIEW_APPOINTMENT
+            && consultationId ?
+              <ViewAppointmentForm
+                consultationId={consultationId}
+                form={form}
+              /> :
+              modalStatus === MODAL_STATUS.DOCTOR_EDIT_ADD_APPOINTMENT
+              && consultationId ?
+                <AddAdviceAppointmentForm
+                  consultationId={consultationId}
+                  form={form}
+                /> : null
         }
       </Form>
     </Modal>

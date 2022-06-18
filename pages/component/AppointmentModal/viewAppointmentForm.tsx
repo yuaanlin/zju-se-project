@@ -1,7 +1,7 @@
 import { getVisitTime } from './addAppointmentForm';
 import {
   ConsultationRecordType,
-  getOneAppointment,
+  getOneAppointment
 } from '../../../services/patient/appointment';
 import React, { useEffect, useState } from 'react';
 import { Input, Form, FormInstance, message, Select, Button, Descriptions } from 'antd';
@@ -41,7 +41,12 @@ const ViewAppointmentForm: React.FC<ViewAppointmentFormProps> = ({
         <Descriptions.Item label="科室">{value.clinic_name}</Descriptions.Item>
         <Descriptions.Item label="医生">{value.doctor_name}</Descriptions.Item>
         <Descriptions.Item label="就诊时间">{value.visit_time}</Descriptions.Item>
-        <Descriptions.Item label="医嘱" span={3}>{value.advice}</Descriptions.Item>
+        <Descriptions.Item label="医嘱" span={3}>
+          {value.advice}
+        </Descriptions.Item>
+        <Descriptions.Item label="患者自述" span={3}>
+          {value.patient_description}
+        </Descriptions.Item>
         <Descriptions.Item label="用药" >
           {
             value.medicines ? value.medicines.map((x:any)=>{

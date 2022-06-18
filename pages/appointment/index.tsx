@@ -1,6 +1,7 @@
 import SiderMenu from '../component/SiderMenu';
 import AppointmentModal, { MODAL_STATUS } from '../component/AppointmentModal/index';
 import { cancelAppointment, getAppointment } from '../../services/patient/appointment';
+import { getAllConsultation } from '../../services/doctor/consultation';
 import { Button, Layout, message, Space, Table, Tag } from 'antd';
 import { useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
@@ -44,6 +45,12 @@ const tagColor = [
 ];
 
 export default function AppointmentPage() {
+  const [identity, setIdentity] = useState<string|null>('');
+  useEffect(()=>{
+    const id_opt = localStorage.getItem('identity');
+    const identity = id_opt;
+    setIdentity(identity);
+  });
   const [modalVisible, setModalVisible] = useState(false);
   const [consultationId, setConsultationId] = useState<number|undefined>(undefined);
   const [modalStatus, setModalStatus] = useState(MODAL_STATUS.USER_ADD_APPOINTMENT);
@@ -78,7 +85,12 @@ export default function AppointmentPage() {
   };
 
   const getAppointmentList = async () => {
-    let res = await getAppointment();
+    let res ;
+    let identity = localStorage.getItem('identity');
+    if (identity === 'patient')
+      res = await getAppointment();
+    else
+      res = await getAllConsultation();
     if (res.errorCode != 200) {
       message.error(res.errorMsg);
       return;
@@ -126,25 +138,31 @@ export default function AppointmentPage() {
       key: 'action',
       render: (text: any, record: any) => (
         <Space size="middle">
-          <Button
-            type={'link'}
-            onClick={
-              () => {
-                setConsultationId(record.id);
-                updateApp(record.id);
-              }}
-          >
-            问诊
-          </Button>
-          <Button
-            type={'link'}
-            onClick={
-              () => {
-                cancelApp(record.id);
-              }}
-          >
-            删除
-          </Button>
+          {
+            identity === 'doctor' ?
+              <Button
+                type={'link'}
+                onClick={
+                  () => {
+                    setConsultationId(record.id);
+                    updateApp(record.id);
+                  }}
+              >
+                问诊
+              </Button> : null
+          }
+          {
+            identity === 'admin' ?
+              <Button
+                type={'link'}
+                onClick={
+                  () => {
+                    cancelApp(record.id);
+                  }}
+              >
+                删除
+              </Button> : null
+          }
           <Button
             type={'link'}
             onClick={
@@ -161,6 +179,8 @@ export default function AppointmentPage() {
   ];
 
   useEffect(() => {
+    let i = localStorage.getItem('identity');
+    setIdentity(i);
     getAppointmentList();
   }, []);
   return (
@@ -201,20 +221,23 @@ export default function AppointmentPage() {
               /> : null
           }
         </div>
-        <Button
-          style={{
-            position: 'absolute',
-            right: 100,
-            bottom: 50
-          }}
-          onClick={()=>{
-            setModalStatus(MODAL_STATUS.USER_ADD_APPOINTMENT);
-            setConsultationId(undefined);
-            setModalVisible(true);
-          }}
-          type="primary"
-          shape="circle"
-          icon={<PlusOutlined />} />
+        {
+          identity === 'patient' ?
+            <Button
+              style={{
+                position: 'absolute',
+                right: 100,
+                bottom: 50
+              }}
+              onClick={()=>{
+                setModalStatus(MODAL_STATUS.USER_ADD_APPOINTMENT);
+                setConsultationId(undefined);
+                setModalVisible(true);
+              }}
+              type="primary"
+              shape="circle"
+              icon={<PlusOutlined />} /> : null
+        }
       </Content>
     </>
   );

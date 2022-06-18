@@ -134,7 +134,7 @@ export default function MedicinePage() {
               setModalVisible(true);
             }}
           >
-            Update
+            修改
           </Typography.Link>
 
           <Popconfirm
@@ -145,7 +145,7 @@ export default function MedicinePage() {
               if (res.errorCode == 200) onCreate();
             }}
           >
-            <a>Delete</a>
+            <a>删除</a>
           </Popconfirm>
         </Space>
       ),

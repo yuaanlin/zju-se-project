@@ -19,7 +19,7 @@ const Home: NextPage = () => {
         </h1>
 
         <p className={styles.description}>
-          系统共分为四大模块，每个模块已经预先配置好一级路由，请个小组按需求在模块下新增二、三级路由。
+          守护您的健康
         </p>
 
         <div className={styles.grid}>

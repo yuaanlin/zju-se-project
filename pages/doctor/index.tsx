@@ -1,11 +1,5 @@
 import SiderMenu from '../component/SiderMenu';
-import { getClinics } from '../../services/patient/appointment';
-import ClinicModal from '../component/ClinicModal';
-import {
-  createClinic,
-  deleteClinic,
-  updateClinic
-} from '../../services/admin/clinic';
+import { deleteDoctor, DoctorType, getDoctors, updateDoctor } from '../../services/admin/doctor';
 import {
   Button,
   Form,
@@ -21,78 +15,69 @@ import { PlusOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
 
-type ClinicType = {
-  key: string,
-  clinic_id: number,
-  name: string,
-  description: string
-}
-
-export default function ClinicPage() {
+export default function DoctorPage() {
   const [modalVisible, setModalVisible] = useState(false);
-  const [editingClinic, setEditingClinic] = useState<ClinicType>();
-  const [appTable, setAppTable] = useState<ClinicType[]>([]);
+  const [editingDoctor, setEditingDoctor] = useState<DoctorType>();
+  const [appTable, setAppTable] = useState<DoctorType[]>([]);
   const [identity, setIdentity] = useState<string|null>('');
 
-  async function onCreateClinic(v: any) {
-    const res = await createClinic(v.name, v.description);
-    await getClinicList();
+  async function onUpdateDoctor(v: DoctorType, n: any) {
+    if (!editingDoctor) return;
+    const res = await updateDoctor({ ...v, ...n });
     if (res.errorCode !== 200) {
       message.error(res.errorMsg);
       return;
     }
-    message.success(res.errorMsg);
+    await getDoctorList();
+    message.success('医生更改成功;)');
     setModalVisible(false);
   }
 
-  async function onUpdateClinic(v: any) {
-    if (!editingClinic) return;
-    const res = await updateClinic(
-      editingClinic.clinic_id, v.name, v.description);
+  async function onDeleteClinic(doctor: DoctorType) {
+    const res = await deleteDoctor(doctor.id);
     if (res.errorCode !== 200) {
       message.error(res.errorMsg);
       return;
     }
-    message.success('科室更改成功;)');
-    await getClinicList();
-    setModalVisible(false);
-  }
-
-  async function onDeleteClinic(clinic: ClinicType) {
-    const res = await deleteClinic(clinic.clinic_id);
-    await getClinicList();
-    if (res.errorCode !== 200) {
-      message.error(res.errorMsg);
-      return;
-    }
-    message.success(`科室 ${clinic.name} 已被删除`);
+    await getDoctorList();
+    message.success(`医生 ${doctor.name} 已被删除`);
   }
 
   const columns = [
     {
-      title: '科室编号',
-      dataIndex: 'clinic_id',
-      key: 'clinic_id',
+      title: '医生编号',
+      dataIndex: 'id',
+      key: 'id',
     },
     {
       title: '科室名',
+      dataIndex: 'clinic',
+      key: 'clinic',
+    },
+    {
+      title: '医生',
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: '科室描述',
+      title: '手机',
+      dataIndex: 'phone',
+      key: 'phone',
+    },
+    {
+      title: '描述',
       dataIndex: 'description',
       key: 'description',
     },
     {
       title: '操作',
       key: 'action',
-      render: (_: string, record: ClinicType) => (
+      render: (_: string, record: DoctorType) => (
         <Space size="middle">
           {
             identity === 'admin' ?
               <>
-                <a onClick={() => setEditingClinic(record)}>
+                <a onClick={() => setEditingDoctor(record)}>
                   修改信息
                 </a>
                 <a onClick={() => onDeleteClinic(record)}>
@@ -105,8 +90,8 @@ export default function ClinicPage() {
     },
   ];
 
-  const getClinicList = async () => {
-    let res = await getClinics();
+  const getDoctorList = async () => {
+    let res = await getDoctors();
     if (res.errorCode != 200) {
       message.error(res.errorMsg);
       return;
@@ -114,7 +99,7 @@ export default function ClinicPage() {
     let newappTable = res.payload.msg.map(x => {
       return {
         ...x,
-        key: x.clinic_id.toString()
+        key: x.id.toString()
       };
     });
     setAppTable(newappTable);
@@ -123,7 +108,7 @@ export default function ClinicPage() {
   useEffect(() => {
     let i = localStorage.getItem('identity');
     setIdentity(i);
-    getClinicList();
+    getDoctorList();
   }, []);
 
   return (
@@ -139,14 +124,8 @@ export default function ClinicPage() {
         }}
       >
         <div>
-          <h1>科室/管理平台</h1>
+          <h1>医生/管理平台</h1>
           <Table
-            onRow={record => {
-              return {
-                onClick: () => {
-                }
-              };
-            }}
             pagination={{
               position: ['bottomCenter'],
               hideOnSinglePage: true,
@@ -155,47 +134,25 @@ export default function ClinicPage() {
             columns={columns}
             dataSource={appTable}
           />
-          <ClinicModal
-            visible={modalVisible}
-            onCreate={onCreateClinic}
-            onCancel={() => {
-              setModalVisible(false);
-            }}
-          />
-          <UpdateClinicModal
-            clinic={editingClinic}
-            onSubmit={onUpdateClinic}
-            onCancel={() => setEditingClinic(undefined)} />
+          <UpdateDoctorModal
+            doctor={editingDoctor}
+            onSubmit={onUpdateDoctor}
+            onCancel={() => setEditingDoctor(undefined)} />
         </div>
-        {
-          identity === 'admin' ?
-            <Button
-              style={{
-                position: 'absolute',
-                right: 100,
-                bottom: 150
-              }}
-              onClick={() => {
-                setModalVisible(true);
-              }}
-              type="primary"
-              shape="circle"
-              icon={<PlusOutlined />} /> : null
-        }
       </Content>
     </>
   );
 }
 
-interface UpdateClinicModalProps {
-  clinic?: ClinicType;
-  onSubmit: (values: any) => void;
+interface UpdateDoctorModalProps {
+  doctor?: DoctorType;
+  onSubmit: (values: any, newValue: any) => void;
   onCancel: () => void;
 }
 
-const UpdateClinicModal: React.FC<UpdateClinicModalProps> = (props) => {
+const UpdateDoctorModal: React.FC<UpdateDoctorModalProps> = (props) => {
   const {
-    clinic,
+    doctor,
     onSubmit,
     onCancel
   } = props;
@@ -203,18 +160,20 @@ const UpdateClinicModal: React.FC<UpdateClinicModalProps> = (props) => {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    if (!clinic) return;
+    if (!doctor) return;
     form.setFieldsValue({
-      name: clinic.name,
-      description: clinic.description
+      name: doctor.name,
+      description: doctor.description,
+      phone: doctor.phone,
+      email: doctor.email,
     });
-  }, [clinic]);
+  }, [doctor]);
 
   return (
     <Modal
-      visible={!!clinic}
-      title="编辑科室信息"
-      okText="确定"
+      visible={!!doctor}
+      title="编辑医生信息"
+      okText="确认"
       cancelText="取消"
       onCancel={() => {
         form.resetFields();
@@ -224,7 +183,7 @@ const UpdateClinicModal: React.FC<UpdateClinicModalProps> = (props) => {
         form
           .validateFields()
           .then(values => {
-            onSubmit(values);
+            onSubmit(doctor, values);
             form.resetFields();
           })
           .catch(async info => {
@@ -243,11 +202,11 @@ const UpdateClinicModal: React.FC<UpdateClinicModalProps> = (props) => {
       >
         <Form.Item
           name="name"
-          label="科室名称"
+          label="医生名称"
           rules={[
             {
               required: true,
-              message: '请填写科室名称'
+              message: '请填写医生名称'
             },
           ]}
         >
@@ -256,11 +215,37 @@ const UpdateClinicModal: React.FC<UpdateClinicModalProps> = (props) => {
 
         <Form.Item
           name="description"
-          label="科室描述"
+          label="医生描述"
           rules={[
             {
               required: true,
-              message: '请填写科室描述'
+              message: '请填写医生描述'
+            }
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="phone"
+          label="医生手机"
+          rules={[
+            {
+              required: true,
+              message: '请填写医生手机'
+            }
+          ]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          name="email"
+          label="医生邮件"
+          rules={[
+            {
+              required: true,
+              message: '请填写医生邮件'
             }
           ]}
         >

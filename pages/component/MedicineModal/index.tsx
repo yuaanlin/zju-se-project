@@ -85,13 +85,13 @@ const MedicineModal: React.FC<MedicineModalProps> = ({
   useEffect(() => {
     switch (modalStatus) {
       case MODAL_STATUS.VIEW_MEDICINE_DETAIL:
-        setTitle('View Medication Detail');
+        setTitle('查看药物信息');
         break;
       case MODAL_STATUS.ADMIN_ADD_MEDICATION:
-        setTitle('Add Medication');
+        setTitle('添加药物');
         break;
       case MODAL_STATUS.ADMIN_UPDATE_MEDICATION:
-        setTitle('Update Medication');
+        setTitle('修改药物');
         break;
     }
   }, [modalStatus]);
