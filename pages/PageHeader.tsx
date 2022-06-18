@@ -3,6 +3,7 @@ import { createLogout } from '../services/utils/log';
 import { useRouter } from 'next/router';
 import 'antd/dist/antd.css';
 import { Button, Layout, Menu, Space } from 'antd';
+import { message } from 'antd';
 import React from 'react';
 import Link from 'next/link';
 
@@ -28,19 +29,19 @@ const PageHeader = () =>{
           // setLoginDone(false);
             authProps.setLogout();
 
-            alert('退出成功！');
+            message.success('退出成功！');
             localStorage.removeItem('identity');
             localStorage.removeItem('token');
             router.push('/');
           }
           else { //  失败,
-            alert('退出失败！');
-            alert(response.errorMsg);
+            message.error('退出失败！');
+            message.error(response.errorMsg);
           }
 
         })
         .catch(()=>{
-          alert('退出失败，请检查网络！');
+          message.error('退出失败，请检查网络！');
         });
 
     }

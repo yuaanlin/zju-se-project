@@ -92,7 +92,8 @@ export default function AppointmentPage() {
     else
       res = await getAllConsultation();
     if (res.errorCode != 200) {
-      message.error(res.errorMsg);
+      if (res.errorCode != 402)
+        message.error(res.errorMsg);
       return;
     }
     let newappTable = res.payload.consultationInfo.map(x => {
