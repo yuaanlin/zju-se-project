@@ -19,28 +19,21 @@ const beforeUpload = (file:any)=>{
   if (!size)
     message.error('Image must smaller than 1MB!');
 
-  return type&&size;
+  // Don't upload automatically!
+  return false;
 };
 
 const Avatar = ({ value, onChange }:any)=>{
+
   const [loading, setLoading] = useState(false);
+
   const handleChange = ({ file }:any)=>{
-    switch(file.status)
-    {
-      case 'uploading':
-        setLoading(true);
-        break;
-      case 'done':
-        getBase64(file.originFileObj)
-          .then(imageUrl=>{
-            onChange(imageUrl);
-            setLoading(false);
-          })
-          .catch(error=>console.log(error));
-        break;
-      default: break;
-    }
+    getBase64(file).then(imageUrl=>{
+      onChange(imageUrl);
+      setLoading(false);
+    }).catch(error=>console.error(error));
   };
+
   return (<ImgCrop rotate>
     <Upload
       name="avatar"

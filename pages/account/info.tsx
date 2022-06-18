@@ -6,7 +6,7 @@ import { Identity } from '../login/index';
 import * as patient from '../../services/patient/info';
 import * as doctor from '../../services/doctor/info';
 import * as admin from '../../services/admin/info';
-import { Form, Input, Button, Layout } from 'antd';
+import { Form, Input, Button, Layout, message } from 'antd';
 import { useEffect, useState } from 'react';
 
 const { Content } = Layout;
@@ -20,12 +20,14 @@ const PatientInfo = ({ info }:{info:patient.Info})=>{
   const [form] = Form.useForm<patient.Info>();
   useEffect(()=>{ form.setFieldsValue(info); });
 
-  const onFinish = (info:patient.Info)=>
-  {
-    console.log('update', info);
-    patient.updateInfo(info)
-      .then(()=>console.log('done'))
-      .catch(()=>console.log('fail'));
+  const onFinish = async (info: patient.Info) => {
+    try {
+      await patient.updateInfo(info);
+      message.success({ content: '修改成功！' });
+    } catch (err) {
+      console.error(err);
+      message.error({ content: '发生错误！' });
+    }
   };
 
   return (<>
@@ -63,13 +65,16 @@ const DoctorInfo = ({ info }:{info:doctor.Info})=>{
   const [form] = Form.useForm<doctor.Info>();
   useEffect(()=>{ form.setFieldsValue(info); });
 
-  const onFinish = (info:doctor.Info)=>
-  {
-    console.log('update', info);
-    doctor.updateInfo(info)
-      .then(()=>console.log('done'))
-      .catch(()=>console.log('fail'));
+  const onFinish = async (info: doctor.Info) => {
+    try {
+      await doctor.updateInfo(info);
+      message.success({ content: '修改成功！' });
+    } catch (err) {
+      console.error(err);
+      message.error({ content: '发生错误！' });
+    }
   };
+
   return (<>
     <SiderMenu />
 
