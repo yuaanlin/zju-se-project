@@ -2,6 +2,7 @@ import SiderMenu from '../component/SiderMenu';
 import { createLogin, createDoctorSignup, createPatientSignup } from '../../services/utils/log';
 import { useAuth } from '../_app';
 import { Layout, Input, Button, Radio, Space, RadioChangeEvent } from 'antd';
+import { message } from 'antd';
 import React, { ChangeEvent, useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -164,7 +165,7 @@ export default function LoginPage() {
                 if (response.errorCode == 200) { //  成功
 
                   authProps.setLogin();
-                  alert('注册成功！');
+                  message.success('注册成功！');
                   localStorage.setItem('identity', identity);
                   localStorage.setItem('token', response.payload.token);
 
@@ -197,7 +198,7 @@ export default function LoginPage() {
               .catch(()=>{
                 setPassword('');
                 setLogInfo('');
-                alert('注册失败，请检查网络！');
+                message.error('注册失败，请检查网络！');
               });
           }
           else{
@@ -260,7 +261,7 @@ export default function LoginPage() {
                   if (response.errorCode == 200) { //  成功
 
                     authProps.setLogin();
-                    alert('注册成功！');
+                    message.success('注册成功！');
                     localStorage.setItem('identity', identity);
                     localStorage.setItem('token', response.payload.token);
 
@@ -293,7 +294,7 @@ export default function LoginPage() {
                 .catch(()=>{
                   setPassword('');
                   setLogInfo('');
-                  alert('注册失败，请检查网络！');
+                  message.error('注册失败，请检查网络！');
                 });
             }
 
@@ -365,7 +366,7 @@ export default function LoginPage() {
               if (response.errorCode == 200) { //  成功
                 authProps.setLogin();
                 // useAuth().login_done = true;
-                alert('登录成功！');
+                message.success('登录成功！');
                 localStorage.setItem('identity', identity);
                 localStorage.setItem('token', response.payload.token);
                 setIdentity('');
@@ -384,7 +385,7 @@ export default function LoginPage() {
             .catch(()=>{
               setPassword('');
               setLogInfo('');
-              alert('登录失败，请检查网络！');
+              message.error('登录失败，请检查网络！');
             });
         }
         else{
